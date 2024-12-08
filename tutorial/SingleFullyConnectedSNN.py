@@ -35,13 +35,13 @@ def main():
     net.to(device)
     # init dataloader
     train_dataset = torchvision.datasets.MNIST(
-        root='./data',
+        root='E:/DataSets',
         train=True,
         transform=torchvision.transforms.ToTensor(),
         download=True
     )
     test_dataset = torchvision.datasets.MNIST(
-        root='./data',
+        root='E:/DataSets',
         train=False,
         transform=torchvision.transforms.ToTensor(),
         download=True

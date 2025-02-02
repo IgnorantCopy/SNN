@@ -13,7 +13,7 @@
    + 终端（进入到 `ann.py` 所在目录）
 
    ```powershell
-   python ann.py --dataset MNIST --batch_size 64 -lr 0.001 -e 100 --optimzer SGD
+   python ann.py --dataset MNIST --batch_size 64 -lr 0.001 -e 100 --optimizer SGD
    ```
 
    + Pycharm

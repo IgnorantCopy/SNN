@@ -11,6 +11,7 @@ import datetime
 import time
 from net import ConvNet
 
+
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
@@ -48,6 +49,8 @@ def main():
     if not os.path.exists(model_dir):
         os.makedirs(model_dir)
 
+    log_file = open(os.path.join(log_dir, f"log_ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}"), "w") if save_log else sys.stdout
+
     if dataset_name == "MNIST":
         num_of_labels = 10
         image_size = 28
@@ -64,6 +67,8 @@ def main():
         test_dataset = datasets.MNIST(root=dataset_root, train=False, transform=transform_test, download=True)
         model = ConvNet(num_of_labels, image_size, batch_size, 1)
     else:
+        log_file.write(f"Invalid dataset name: {dataset_name}\n")
+        log_file.close()
         raise ValueError("Invalid dataset name")
 
     train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
@@ -74,22 +79,31 @@ def main():
     elif optimizer_name == "Adam":
         optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=weight_decay)
     else:
+        log_file.write(f"Invalid optimizer name: {optimizer_name}\n")
+        log_file.close()
         raise ValueError("Invalid optimizer name")
     lr_scheduler = ReduceLROnPlateau(optimizer, mode='min', patience=5)
 
     device = torch.device("cuda" if torch.cuda.is_available() and use_gpu else "cpu")
     model.to(device)
 
-    log_file = open(os.path.join(log_dir, f"log_ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}"), "w") if save_log else sys.stdout
-
+    start_epoch = 0
     if pretrained_model:
-        model.load_state_dict(torch.load(pretrained_model))
-        log_file.write("Load pretrained model from {}\n".format(pretrained_model))
+        try:
+            params = torch.load(pretrained_model)
+            model.load_state_dict(params['state_dict'])
+            start_epoch = params['epoch']
+            log_file.write("Load pretrained model from {}\n".format(pretrained_model))
+        except FileNotFoundError as e:
+            log_file.write(f"Cannot load pretrained model from {pretrained_model}\n")
+            log_file.write(str(e) + "\n")
+            log_file.close()
+            raise e
 
 
     best_acc = 0.0
     log_file.write(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
-    for epoch in range(epoches):
+    for epoch in range(start_epoch, epoches):
         start_time = time.time()
         train_loss = 0.0
         train_acc = 0.0
@@ -136,9 +150,14 @@ def main():
 
         if test_acc > best_acc:
             best_acc = test_acc
-            torch.save(model.state_dict(), os.path.join(model_dir, f"ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}.pth"))
+            torch.save({
+                "state_dict": model.state_dict(),
+                "epoch": epoch+1,
+                "accuracy": test_acc,
+            }, os.path.join(model_dir, f"ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}.pth"))
             log_file.write(f"Save best model with test acc {best_acc:.4f}\n")
         log_file.write('-' * 50 + '\n')
+        log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
     log_file.close()
 

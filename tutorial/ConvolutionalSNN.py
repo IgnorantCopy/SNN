@@ -8,7 +8,7 @@ import torch.utils.data as data
 from torch.utils.tensorboard import SummaryWriter
 from torch.cuda import amp
 import torchvision
-from spikingjelly.activation_based import neuron, functional, layer, surrogate, encoding
+from spikingjelly.activation_based import neuron, functional, layer, surrogate
 from spikingjelly import visualizing
 import time
 import datetime

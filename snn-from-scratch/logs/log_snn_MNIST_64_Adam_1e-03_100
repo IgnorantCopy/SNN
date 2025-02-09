@@ -1,0 +1,113 @@
+Start training snn on MNIST at 2025-02-04 10:56:20.883649
+Epoch 1:
+	train_loss: 0.0268
+	train_acc: 0.8860
+time: 32029.42s
+
+	test_loss: 0.0261
+	test_acc: 0.9100
+	time: 375.00s
+Save best model with test_acc: 0.9100
+--------------------------------------------------
+Epoch 2:
+	train_loss: 0.0266
+	train_acc: 0.9180
+time: 29756.71s
+
+	test_loss: 0.0266
+	test_acc: 0.9214
+	time: 377.82s
+Save best model with test_acc: 0.9214
+--------------------------------------------------
+Epoch 3:
+	train_loss: 0.0267
+	train_acc: 0.9209
+time: 29936.71s
+
+	test_loss: 0.0267
+	test_acc: 0.9275
+	time: 387.79s
+Save best model with test_acc: 0.9275
+--------------------------------------------------
+Epoch 4:
+	train_loss: 0.0272
+	train_acc: 0.9195
+time: 29095.15s
+
+	test_loss: 0.0279
+	test_acc: 0.9131
+	time: 376.32s
+--------------------------------------------------
+Epoch 5:
+	train_loss: 0.0275
+	train_acc: 0.9151
+time: 30118.09s
+
+	test_loss: 0.0277
+	test_acc: 0.9121
+	time: 376.92s
+--------------------------------------------------
+Epoch 6:
+	train_loss: 0.0271
+	train_acc: 0.9135
+time: 29144.39s
+
+	test_loss: 0.0257
+	test_acc: 0.9249
+	time: 385.03s
+--------------------------------------------------
+Epoch 7:
+	train_loss: 0.0271
+	train_acc: 0.9121
+time: 30021.09s
+
+	test_loss: 0.0271
+	test_acc: 0.9168
+	time: 504.43s
+--------------------------------------------------
+Epoch 8:
+	train_loss: 0.0272
+	train_acc: 0.9100
+time: 30060.68s
+
+	test_loss: 0.0247
+	test_acc: 0.9268
+	time: 377.83s
+--------------------------------------------------
+Epoch 9:
+	train_loss: 0.0258
+	train_acc: 0.9215
+time: 30977.70s
+
+	test_loss: 0.0245
+	test_acc: 0.9259
+	time: 503.52s
+--------------------------------------------------
+Epoch 10:
+	train_loss: 0.0258
+	train_acc: 0.9212
+time: 31388.88s
+
+	test_loss: 0.0242
+	test_acc: 0.9322
+	time: 377.04s
+Save best model with test_acc: 0.9322
+--------------------------------------------------
+Epoch 11:
+	train_loss: 0.0258
+	train_acc: 0.9217
+time: 29021.22s
+
+	test_loss: 0.0247
+	test_acc: 0.9268
+	time: 377.00s
+--------------------------------------------------
+Epoch 12:
+	train_loss: 0.0258
+	train_acc: 0.9218
+time: 32529.44s
+
+	test_loss: 0.0248
+	test_acc: 0.9273
+	time: 385.58s
+--------------------------------------------------

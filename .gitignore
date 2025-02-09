@@ -162,4 +162,6 @@ cython_debug/
 #.idea/
 
 tutorial/data
+ann2snn/models
+snn-from-scratch/models
 hybrid/models

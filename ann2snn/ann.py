@@ -10,6 +10,7 @@ import sys
 import datetime
 import time
 from net import ConvNet
+from tutorial.send_message import send_message
 
 
 def config():
@@ -160,6 +161,7 @@ def main():
         log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
     log_file.close()
+    send_message()
 
 
 if __name__ == '__main__':

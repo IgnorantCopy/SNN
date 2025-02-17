@@ -9,6 +9,7 @@ import os
 import time
 import datetime
 from net import ConvNet
+from tutorial.send_message import send_message
 
 
 def config():
@@ -41,7 +42,7 @@ def main():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    log_file = open(os.path.join(log_dir, f"log_snn{ann_path[ann_path.rfind('ann')+3:]}_{time_steps}_{mode}.txt"), 'w') if save_log else sys.stdout
+    log_file = open(os.path.join(log_dir, f"log_snn{ann_path[ann_path.rfind('ann')+3:-4]}_{time_steps}_{mode}"), 'w') if save_log else sys.stdout
 
     if dataset_name == "MNIST":
         image_size = 28
@@ -101,6 +102,7 @@ def main():
     }, os.path.join(model_dir, f"snn{ann_path[ann_path.rfind('ann')+3:]}_{time_steps}_{mode}.pth"))
     log_file.write(f"Saved SNN model at {datetime.datetime.now()}\n")
     log_file.close()
+    send_message()
 
 
 if __name__ == '__main__':

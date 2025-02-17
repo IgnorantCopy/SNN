@@ -1,0 +1,94 @@
+Start training snn on MNIST at 2025-02-17 08:04:40.022941
+Epoch 1:
+	train_loss: 0.0213
+	train_acc: 0.8963
+	time: 1919.13s
+
+	test_loss: 0.0187
+	test_acc: 0.9286
+	time: 86.83s
+Save best model with test_acc: 0.9286
+--------------------------------------------------
+Epoch 2:
+	train_loss: 0.0222
+	train_acc: 0.9241
+	time: 2558.01s
+
+	test_loss: 0.0266
+	test_acc: 0.9305
+	time: 114.16s
+Save best model with test_acc: 0.9305
+--------------------------------------------------
+Epoch 3:
+	train_loss: 0.0261
+	train_acc: 0.9255
+	time: 2740.17s
+
+	test_loss: 0.0250
+	test_acc: 0.9318
+	time: 112.97s
+Save best model with test_acc: 0.9318
+--------------------------------------------------
+Epoch 4:
+	train_loss: 0.0258
+	train_acc: 0.9197
+	time: 2701.16s
+
+	test_loss: 0.0247
+	test_acc: 0.9298
+	time: 113.40s
+--------------------------------------------------
+Epoch 5:
+	train_loss: 0.0264
+	train_acc: 0.9119
+	time: 2719.05s
+
+	test_loss: 0.0244
+	test_acc: 0.9236
+	time: 112.57s
+--------------------------------------------------
+Epoch 6:
+	train_loss: 0.0264
+	train_acc: 0.9106
+	time: 2714.00s
+
+	test_loss: 0.0255
+	test_acc: 0.9100
+	time: 112.60s
+--------------------------------------------------
+Epoch 7:
+	train_loss: 0.0260
+	train_acc: 0.9122
+	time: 2377.67s
+
+	test_loss: 0.0255
+	test_acc: 0.9187
+	time: 85.29s
+--------------------------------------------------
+Epoch 8:
+	train_loss: 0.0249
+	train_acc: 0.9214
+	time: 2776.39s
+
+	test_loss: 0.0239
+	test_acc: 0.9215
+	time: 112.37s
+--------------------------------------------------
+Epoch 9:
+	train_loss: 0.0249
+	train_acc: 0.9211
+	time: 2689.40s
+
+	test_loss: 0.0240
+	test_acc: 0.9256
+	time: 110.70s
+--------------------------------------------------
+Epoch 10:
+	train_loss: 0.0247
+	train_acc: 0.9227
+	time: 2710.96s
+
+	test_loss: 0.0237
+	test_acc: 0.9259
+	time: 112.44s
+--------------------------------------------------

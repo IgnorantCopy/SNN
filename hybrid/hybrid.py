@@ -11,6 +11,7 @@ import sys
 import os
 import time
 import datetime
+from tutorial.send_message import send_message
 
 
 def config():
@@ -216,6 +217,7 @@ def main():
         log_file.flush()
     log_file.write(f"End training snn on {dataset_name} at {datetime.datetime.now()} with best test_acc: {best_acc:.4f}\n")
     log_file.close()
+    send_message()
 
 
 if __name__ == '__main__':

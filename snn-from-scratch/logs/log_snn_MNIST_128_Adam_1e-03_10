@@ -1,0 +1,110 @@
+Load pretrained model from ./models/snn_MNIST_128_Adam_1e-03_10.pth
+Start training snn on MNIST at 2025-02-18 21:52:33.273154
+Epoch 46:
+	train_loss: 0.0249
+	train_acc: 0.9137
+	time: 2857.58s
+
+	test_loss: 0.0242
+	test_acc: 0.9174
+	time: 113.78s
+--------------------------------------------------
+Epoch 47:
+	train_loss: 0.0247
+	train_acc: 0.9136
+	time: 2678.45s
+
+	test_loss: 0.0252
+	test_acc: 0.9035
+	time: 90.19s
+--------------------------------------------------
+Epoch 48:
+	train_loss: 0.0248
+	train_acc: 0.9122
+	time: 1914.81s
+
+	test_loss: 0.0265
+	test_acc: 0.9032
+	time: 87.20s
+--------------------------------------------------
+Epoch 49:
+	train_loss: 0.0248
+	train_acc: 0.9124
+	time: 2431.22s
+
+	test_loss: 0.0241
+	test_acc: 0.9127
+	time: 113.58s
+--------------------------------------------------
+Epoch 50:
+	train_loss: 0.0245
+	train_acc: 0.9126
+	time: 2646.85s
+
+	test_loss: 0.0232
+	test_acc: 0.9209
+	time: 113.33s
+--------------------------------------------------
+Epoch 51:
+	train_loss: 0.0246
+	train_acc: 0.9124
+	time: 2637.47s
+
+	test_loss: 0.0237
+	test_acc: 0.9130
+	time: 113.15s
+--------------------------------------------------
+Epoch 52:
+	train_loss: 0.0244
+	train_acc: 0.9129
+	time: 2634.98s
+
+	test_loss: 0.0236
+	test_acc: 0.9142
+	time: 113.62s
+--------------------------------------------------
+Epoch 53:
+	train_loss: 0.0244
+	train_acc: 0.9113
+	time: 2635.61s
+
+	test_loss: 0.0236
+	test_acc: 0.9170
+	time: 113.12s
+--------------------------------------------------
+Epoch 54:
+	train_loss: 0.0244
+	train_acc: 0.9138
+	time: 2634.19s
+
+	test_loss: 0.0233
+	test_acc: 0.9130
+	time: 113.54s
+--------------------------------------------------
+Epoch 55:
+	train_loss: 0.0245
+	train_acc: 0.9116
+	time: 2635.42s
+
+	test_loss: 0.0234
+	test_acc: 0.9142
+	time: 113.16s
+--------------------------------------------------
+Epoch 56:
+	train_loss: 0.0246
+	train_acc: 0.9112
+	time: 2627.58s
+
+	test_loss: 0.0241
+	test_acc: 0.9142
+	time: 113.23s
+--------------------------------------------------
+Epoch 57:
+	train_loss: 0.0244
+	train_acc: 0.9123
+	time: 2636.43s
+
+	test_loss: 0.0256
+	test_acc: 0.9005
+	time: 113.48s
+--------------------------------------------------

@@ -1,0 +1,938 @@
+Start training ann on MNIST at 2025-02-11 00:05:20.465518
+Epoch 1/100:
+	train loss: 0.7263
+	train acc: 0.7994
+	time: 208.79s
+
+	test loss: 0.3297
+	test acc: 0.9029
+	time: 17.80s
+Save best model with test acc 0.9029
+--------------------------------------------------
+Epoch 2/100:
+	train loss: 0.3048
+	train acc: 0.9077
+	time: 209.49s
+
+	test loss: 0.2212
+	test acc: 0.9370
+	time: 17.83s
+Save best model with test acc 0.9370
+--------------------------------------------------
+Epoch 3/100:
+	train loss: 0.2271
+	train acc: 0.9332
+	time: 209.32s
+
+	test loss: 0.1719
+	test acc: 0.9500
+	time: 17.82s
+Save best model with test acc 0.9500
+--------------------------------------------------
+Epoch 4/100:
+	train loss: 0.1833
+	train acc: 0.9471
+	time: 208.85s
+
+	test loss: 0.1377
+	test acc: 0.9600
+	time: 17.72s
+Save best model with test acc 0.9600
+--------------------------------------------------
+Epoch 5/100:
+	train loss: 0.1546
+	train acc: 0.9564
+	time: 208.32s
+
+	test loss: 0.1302
+	test acc: 0.9619
+	time: 17.80s
+Save best model with test acc 0.9619
+--------------------------------------------------
+Epoch 6/100:
+	train loss: 0.1343
+	train acc: 0.9618
+	time: 209.11s
+
+	test loss: 0.1063
+	test acc: 0.9679
+	time: 17.63s
+Save best model with test acc 0.9679
+--------------------------------------------------
+Epoch 7/100:
+	train loss: 0.1227
+	train acc: 0.9651
+	time: 209.81s
+
+	test loss: 0.0958
+	test acc: 0.9714
+	time: 17.74s
+Save best model with test acc 0.9714
+--------------------------------------------------
+Epoch 8/100:
+	train loss: 0.1120
+	train acc: 0.9683
+	time: 208.52s
+
+	test loss: 0.0872
+	test acc: 0.9737
+	time: 17.66s
+Save best model with test acc 0.9737
+--------------------------------------------------
+Epoch 9/100:
+	train loss: 0.1032
+	train acc: 0.9708
+	time: 208.31s
+
+	test loss: 0.0795
+	test acc: 0.9761
+	time: 17.53s
+Save best model with test acc 0.9761
+--------------------------------------------------
+Epoch 10/100:
+	train loss: 0.0977
+	train acc: 0.9724
+	time: 209.79s
+
+	test loss: 0.0789
+	test acc: 0.9758
+	time: 17.82s
+--------------------------------------------------
+Epoch 11/100:
+	train loss: 0.0915
+	train acc: 0.9735
+	time: 209.91s
+
+	test loss: 0.0772
+	test acc: 0.9760
+	time: 17.85s
+--------------------------------------------------
+Epoch 12/100:
+	train loss: 0.0859
+	train acc: 0.9749
+	time: 209.64s
+
+	test loss: 0.0697
+	test acc: 0.9775
+	time: 17.82s
+Save best model with test acc 0.9775
+--------------------------------------------------
+Epoch 13/100:
+	train loss: 0.0823
+	train acc: 0.9764
+	time: 209.42s
+
+	test loss: 0.0670
+	test acc: 0.9791
+	time: 17.78s
+Save best model with test acc 0.9791
+--------------------------------------------------
+Epoch 14/100:
+	train loss: 0.0787
+	train acc: 0.9773
+	time: 208.80s
+
+	test loss: 0.0622
+	test acc: 0.9796
+	time: 17.67s
+Save best model with test acc 0.9796
+--------------------------------------------------
+Epoch 15/100:
+	train loss: 0.0751
+	train acc: 0.9780
+	time: 209.10s
+
+	test loss: 0.0648
+	test acc: 0.9798
+	time: 17.89s
+Save best model with test acc 0.9798
+--------------------------------------------------
+Epoch 16/100:
+	train loss: 0.0732
+	train acc: 0.9791
+	time: 208.73s
+
+	test loss: 0.0602
+	test acc: 0.9802
+	time: 17.92s
+Save best model with test acc 0.9802
+--------------------------------------------------
+Epoch 17/100:
+	train loss: 0.0690
+	train acc: 0.9804
+	time: 209.23s
+
+	test loss: 0.0601
+	test acc: 0.9804
+	time: 17.75s
+Save best model with test acc 0.9804
+--------------------------------------------------
+Epoch 18/100:
+	train loss: 0.0669
+	train acc: 0.9808
+	time: 208.67s
+
+	test loss: 0.0714
+	test acc: 0.9762
+	time: 17.68s
+--------------------------------------------------
+Epoch 19/100:
+	train loss: 0.0649
+	train acc: 0.9814
+	time: 209.39s
+
+	test loss: 0.0556
+	test acc: 0.9814
+	time: 17.89s
+Save best model with test acc 0.9814
+--------------------------------------------------
+Epoch 20/100:
+	train loss: 0.0624
+	train acc: 0.9817
+	time: 209.13s
+
+	test loss: 0.0541
+	test acc: 0.9825
+	time: 17.72s
+Save best model with test acc 0.9825
+--------------------------------------------------
+Epoch 21/100:
+	train loss: 0.0598
+	train acc: 0.9828
+	time: 208.87s
+
+	test loss: 0.0538
+	test acc: 0.9818
+	time: 17.86s
+--------------------------------------------------
+Epoch 22/100:
+	train loss: 0.0585
+	train acc: 0.9832
+	time: 209.22s
+
+	test loss: 0.0541
+	test acc: 0.9817
+	time: 17.72s
+--------------------------------------------------
+Epoch 23/100:
+	train loss: 0.0571
+	train acc: 0.9832
+	time: 208.89s
+
+	test loss: 0.0494
+	test acc: 0.9832
+	time: 17.62s
+Save best model with test acc 0.9832
+--------------------------------------------------
+Epoch 24/100:
+	train loss: 0.0558
+	train acc: 0.9839
+	time: 209.17s
+
+	test loss: 0.0476
+	test acc: 0.9840
+	time: 17.78s
+Save best model with test acc 0.9840
+--------------------------------------------------
+Epoch 25/100:
+	train loss: 0.0541
+	train acc: 0.9843
+	time: 209.17s
+
+	test loss: 0.0472
+	test acc: 0.9846
+	time: 17.73s
+Save best model with test acc 0.9846
+--------------------------------------------------
+Epoch 26/100:
+	train loss: 0.0523
+	train acc: 0.9851
+	time: 209.13s
+
+	test loss: 0.0477
+	test acc: 0.9842
+	time: 17.60s
+--------------------------------------------------
+Epoch 27/100:
+	train loss: 0.0517
+	train acc: 0.9850
+	time: 208.75s
+
+	test loss: 0.0443
+	test acc: 0.9856
+	time: 17.74s
+Save best model with test acc 0.9856
+--------------------------------------------------
+Epoch 28/100:
+	train loss: 0.0502
+	train acc: 0.9853
+	time: 208.98s
+
+	test loss: 0.0482
+	test acc: 0.9839
+	time: 17.91s
+--------------------------------------------------
+Epoch 29/100:
+	train loss: 0.0486
+	train acc: 0.9857
+	time: 208.58s
+
+	test loss: 0.0461
+	test acc: 0.9846
+	time: 17.72s
+--------------------------------------------------
+Epoch 30/100:
+	train loss: 0.0475
+	train acc: 0.9863
+	time: 209.16s
+
+	test loss: 0.0427
+	test acc: 0.9859
+	time: 17.89s
+Save best model with test acc 0.9859
+--------------------------------------------------
+Epoch 31/100:
+	train loss: 0.0467
+	train acc: 0.9868
+	time: 208.85s
+
+	test loss: 0.0431
+	test acc: 0.9863
+	time: 17.97s
+Save best model with test acc 0.9863
+--------------------------------------------------
+Epoch 32/100:
+	train loss: 0.0456
+	train acc: 0.9868
+	time: 209.46s
+
+	test loss: 0.0402
+	test acc: 0.9861
+	time: 17.97s
+--------------------------------------------------
+Epoch 33/100:
+	train loss: 0.0451
+	train acc: 0.9871
+	time: 209.45s
+
+	test loss: 0.0416
+	test acc: 0.9857
+	time: 18.08s
+--------------------------------------------------
+Epoch 34/100:
+	train loss: 0.0438
+	train acc: 0.9877
+	time: 209.55s
+
+	test loss: 0.0415
+	test acc: 0.9859
+	time: 17.80s
+--------------------------------------------------
+Epoch 35/100:
+	train loss: 0.0433
+	train acc: 0.9877
+	time: 209.30s
+
+	test loss: 0.0396
+	test acc: 0.9869
+	time: 17.78s
+Save best model with test acc 0.9869
+--------------------------------------------------
+Epoch 36/100:
+	train loss: 0.0424
+	train acc: 0.9880
+	time: 209.06s
+
+	test loss: 0.0398
+	test acc: 0.9872
+	time: 17.80s
+Save best model with test acc 0.9872
+--------------------------------------------------
+Epoch 37/100:
+	train loss: 0.0416
+	train acc: 0.9879
+	time: 208.93s
+
+	test loss: 0.0412
+	test acc: 0.9865
+	time: 17.78s
+--------------------------------------------------
+Epoch 38/100:
+	train loss: 0.0407
+	train acc: 0.9886
+	time: 209.63s
+
+	test loss: 0.0437
+	test acc: 0.9867
+	time: 17.87s
+--------------------------------------------------
+Epoch 39/100:
+	train loss: 0.0398
+	train acc: 0.9883
+	time: 208.28s
+
+	test loss: 0.0383
+	test acc: 0.9872
+	time: 17.82s
+--------------------------------------------------
+Epoch 40/100:
+	train loss: 0.0397
+	train acc: 0.9883
+	time: 209.19s
+
+	test loss: 0.0386
+	test acc: 0.9868
+	time: 17.95s
+--------------------------------------------------
+Epoch 41/100:
+	train loss: 0.0384
+	train acc: 0.9891
+	time: 209.41s
+
+	test loss: 0.0366
+	test acc: 0.9877
+	time: 18.06s
+Save best model with test acc 0.9877
+--------------------------------------------------
+Epoch 42/100:
+	train loss: 0.0384
+	train acc: 0.9891
+	time: 208.18s
+
+	test loss: 0.0369
+	test acc: 0.9875
+	time: 17.80s
+--------------------------------------------------
+Epoch 43/100:
+	train loss: 0.0373
+	train acc: 0.9895
+	time: 209.55s
+
+	test loss: 0.0394
+	test acc: 0.9862
+	time: 17.73s
+--------------------------------------------------
+Epoch 44/100:
+	train loss: 0.0364
+	train acc: 0.9896
+	time: 208.53s
+
+	test loss: 0.0396
+	test acc: 0.9864
+	time: 17.89s
+--------------------------------------------------
+Epoch 45/100:
+	train loss: 0.0368
+	train acc: 0.9895
+	time: 208.71s
+
+	test loss: 0.0364
+	test acc: 0.9875
+	time: 18.06s
+--------------------------------------------------
+Epoch 46/100:
+	train loss: 0.0364
+	train acc: 0.9891
+	time: 208.35s
+
+	test loss: 0.0344
+	test acc: 0.9889
+	time: 17.81s
+Save best model with test acc 0.9889
+--------------------------------------------------
+Epoch 47/100:
+	train loss: 0.0350
+	train acc: 0.9896
+	time: 209.26s
+
+	test loss: 0.0365
+	test acc: 0.9878
+	time: 18.25s
+--------------------------------------------------
+Epoch 48/100:
+	train loss: 0.0346
+	train acc: 0.9904
+	time: 208.85s
+
+	test loss: 0.0353
+	test acc: 0.9878
+	time: 17.86s
+--------------------------------------------------
+Epoch 49/100:
+	train loss: 0.0343
+	train acc: 0.9898
+	time: 209.16s
+
+	test loss: 0.0367
+	test acc: 0.9875
+	time: 17.77s
+--------------------------------------------------
+Epoch 50/100:
+	train loss: 0.0334
+	train acc: 0.9903
+	time: 208.52s
+
+	test loss: 0.0353
+	test acc: 0.9888
+	time: 17.81s
+--------------------------------------------------
+Epoch 51/100:
+	train loss: 0.0330
+	train acc: 0.9908
+	time: 209.43s
+
+	test loss: 0.0325
+	test acc: 0.9888
+	time: 17.96s
+--------------------------------------------------
+Epoch 52/100:
+	train loss: 0.0325
+	train acc: 0.9908
+	time: 209.33s
+
+	test loss: 0.0346
+	test acc: 0.9894
+	time: 17.79s
+Save best model with test acc 0.9894
+--------------------------------------------------
+Epoch 53/100:
+	train loss: 0.0320
+	train acc: 0.9908
+	time: 209.22s
+
+	test loss: 0.0350
+	test acc: 0.9879
+	time: 17.71s
+--------------------------------------------------
+Epoch 54/100:
+	train loss: 0.0320
+	train acc: 0.9910
+	time: 209.24s
+
+	test loss: 0.0366
+	test acc: 0.9874
+	time: 17.95s
+--------------------------------------------------
+Epoch 55/100:
+	train loss: 0.0317
+	train acc: 0.9907
+	time: 209.69s
+
+	test loss: 0.0359
+	test acc: 0.9871
+	time: 17.84s
+--------------------------------------------------
+Epoch 56/100:
+	train loss: 0.0312
+	train acc: 0.9909
+	time: 202.03s
+
+	test loss: 0.0329
+	test acc: 0.9886
+	time: 17.69s
+--------------------------------------------------
+Epoch 57/100:
+	train loss: 0.0302
+	train acc: 0.9913
+	time: 208.99s
+
+	test loss: 0.0327
+	test acc: 0.9892
+	time: 17.97s
+--------------------------------------------------
+Epoch 58/100:
+	train loss: 0.0308
+	train acc: 0.9917
+	time: 209.17s
+
+	test loss: 0.0318
+	test acc: 0.9892
+	time: 17.73s
+--------------------------------------------------
+Epoch 59/100:
+	train loss: 0.0299
+	train acc: 0.9917
+	time: 208.75s
+
+	test loss: 0.0345
+	test acc: 0.9874
+	time: 17.74s
+--------------------------------------------------
+Epoch 60/100:
+	train loss: 0.0297
+	train acc: 0.9917
+	time: 208.87s
+
+	test loss: 0.0332
+	test acc: 0.9896
+	time: 17.81s
+Save best model with test acc 0.9896
+--------------------------------------------------
+Epoch 61/100:
+	train loss: 0.0291
+	train acc: 0.9919
+	time: 209.41s
+
+	test loss: 0.0350
+	test acc: 0.9889
+	time: 17.76s
+--------------------------------------------------
+Epoch 62/100:
+	train loss: 0.0295
+	train acc: 0.9917
+	time: 209.31s
+
+	test loss: 0.0315
+	test acc: 0.9893
+	time: 17.86s
+--------------------------------------------------
+Epoch 63/100:
+	train loss: 0.0286
+	train acc: 0.9919
+	time: 209.26s
+
+	test loss: 0.0307
+	test acc: 0.9895
+	time: 18.14s
+--------------------------------------------------
+Epoch 64/100:
+	train loss: 0.0276
+	train acc: 0.9925
+	time: 209.06s
+
+	test loss: 0.0333
+	test acc: 0.9886
+	time: 17.72s
+--------------------------------------------------
+Epoch 65/100:
+	train loss: 0.0276
+	train acc: 0.9924
+	time: 208.94s
+
+	test loss: 0.0326
+	test acc: 0.9898
+	time: 17.81s
+Save best model with test acc 0.9898
+--------------------------------------------------
+Epoch 66/100:
+	train loss: 0.0275
+	train acc: 0.9924
+	time: 209.35s
+
+	test loss: 0.0302
+	test acc: 0.9898
+	time: 17.85s
+--------------------------------------------------
+Epoch 67/100:
+	train loss: 0.0271
+	train acc: 0.9923
+	time: 208.97s
+
+	test loss: 0.0316
+	test acc: 0.9901
+	time: 17.69s
+Save best model with test acc 0.9901
+--------------------------------------------------
+Epoch 68/100:
+	train loss: 0.0265
+	train acc: 0.9928
+	time: 209.50s
+
+	test loss: 0.0302
+	test acc: 0.9897
+	time: 17.86s
+--------------------------------------------------
+Epoch 69/100:
+	train loss: 0.0262
+	train acc: 0.9926
+	time: 209.50s
+
+	test loss: 0.0320
+	test acc: 0.9891
+	time: 17.86s
+--------------------------------------------------
+Epoch 70/100:
+	train loss: 0.0260
+	train acc: 0.9930
+	time: 209.71s
+
+	test loss: 0.0296
+	test acc: 0.9904
+	time: 17.65s
+Save best model with test acc 0.9904
+--------------------------------------------------
+Epoch 71/100:
+	train loss: 0.0264
+	train acc: 0.9928
+	time: 208.29s
+
+	test loss: 0.0331
+	test acc: 0.9899
+	time: 17.75s
+--------------------------------------------------
+Epoch 72/100:
+	train loss: 0.0260
+	train acc: 0.9928
+	time: 209.49s
+
+	test loss: 0.0291
+	test acc: 0.9904
+	time: 17.72s
+--------------------------------------------------
+Epoch 73/100:
+	train loss: 0.0251
+	train acc: 0.9931
+	time: 209.39s
+
+	test loss: 0.0292
+	test acc: 0.9901
+	time: 17.80s
+--------------------------------------------------
+Epoch 74/100:
+	train loss: 0.0251
+	train acc: 0.9930
+	time: 209.14s
+
+	test loss: 0.0309
+	test acc: 0.9890
+	time: 17.74s
+--------------------------------------------------
+Epoch 75/100:
+	train loss: 0.0246
+	train acc: 0.9931
+	time: 209.10s
+
+	test loss: 0.0297
+	test acc: 0.9896
+	time: 17.74s
+--------------------------------------------------
+Epoch 76/100:
+	train loss: 0.0247
+	train acc: 0.9933
+	time: 209.66s
+
+	test loss: 0.0339
+	test acc: 0.9888
+	time: 17.76s
+--------------------------------------------------
+Epoch 77/100:
+	train loss: 0.0242
+	train acc: 0.9935
+	time: 209.28s
+
+	test loss: 0.0313
+	test acc: 0.9896
+	time: 17.76s
+--------------------------------------------------
+Epoch 78/100:
+	train loss: 0.0240
+	train acc: 0.9930
+	time: 209.07s
+
+	test loss: 0.0282
+	test acc: 0.9902
+	time: 17.99s
+--------------------------------------------------
+Epoch 79/100:
+	train loss: 0.0234
+	train acc: 0.9938
+	time: 209.13s
+
+	test loss: 0.0289
+	test acc: 0.9902
+	time: 17.97s
+--------------------------------------------------
+Epoch 80/100:
+	train loss: 0.0239
+	train acc: 0.9932
+	time: 209.42s
+
+	test loss: 0.0296
+	test acc: 0.9905
+	time: 17.74s
+Save best model with test acc 0.9905
+--------------------------------------------------
+Epoch 81/100:
+	train loss: 0.0237
+	train acc: 0.9936
+	time: 209.43s
+
+	test loss: 0.0287
+	test acc: 0.9909
+	time: 17.62s
+Save best model with test acc 0.9909
+--------------------------------------------------
+Epoch 82/100:
+	train loss: 0.0233
+	train acc: 0.9939
+	time: 209.57s
+
+	test loss: 0.0283
+	test acc: 0.9903
+	time: 17.86s
+--------------------------------------------------
+Epoch 83/100:
+	train loss: 0.0234
+	train acc: 0.9938
+	time: 209.52s
+
+	test loss: 0.0282
+	test acc: 0.9905
+	time: 17.97s
+--------------------------------------------------
+Epoch 84/100:
+	train loss: 0.0237
+	train acc: 0.9935
+	time: 209.35s
+
+	test loss: 0.0306
+	test acc: 0.9895
+	time: 17.90s
+--------------------------------------------------
+Epoch 85/100:
+	train loss: 0.0222
+	train acc: 0.9942
+	time: 210.24s
+
+	test loss: 0.0261
+	test acc: 0.9916
+	time: 17.83s
+Save best model with test acc 0.9916
+--------------------------------------------------
+Epoch 86/100:
+	train loss: 0.0218
+	train acc: 0.9942
+	time: 209.50s
+
+	test loss: 0.0284
+	test acc: 0.9907
+	time: 17.61s
+--------------------------------------------------
+Epoch 87/100:
+	train loss: 0.0226
+	train acc: 0.9939
+	time: 209.09s
+
+	test loss: 0.0295
+	test acc: 0.9904
+	time: 17.72s
+--------------------------------------------------
+Epoch 88/100:
+	train loss: 0.0229
+	train acc: 0.9936
+	time: 209.31s
+
+	test loss: 0.0274
+	test acc: 0.9909
+	time: 17.68s
+--------------------------------------------------
+Epoch 89/100:
+	train loss: 0.0217
+	train acc: 0.9942
+	time: 209.67s
+
+	test loss: 0.0297
+	test acc: 0.9907
+	time: 17.78s
+--------------------------------------------------
+Epoch 90/100:
+	train loss: 0.0219
+	train acc: 0.9939
+	time: 209.27s
+
+	test loss: 0.0288
+	test acc: 0.9904
+	time: 17.79s
+--------------------------------------------------
+Epoch 91/100:
+	train loss: 0.0214
+	train acc: 0.9945
+	time: 209.77s
+
+	test loss: 0.0269
+	test acc: 0.9905
+	time: 17.78s
+--------------------------------------------------
+Epoch 92/100:
+	train loss: 0.0212
+	train acc: 0.9942
+	time: 208.92s
+
+	test loss: 0.0340
+	test acc: 0.9895
+	time: 17.96s
+--------------------------------------------------
+Epoch 93/100:
+	train loss: 0.0211
+	train acc: 0.9948
+	time: 209.25s
+
+	test loss: 0.0288
+	test acc: 0.9893
+	time: 17.78s
+--------------------------------------------------
+Epoch 94/100:
+	train loss: 0.0208
+	train acc: 0.9946
+	time: 209.44s
+
+	test loss: 0.0284
+	test acc: 0.9911
+	time: 17.74s
+--------------------------------------------------
+Epoch 95/100:
+	train loss: 0.0208
+	train acc: 0.9944
+	time: 209.45s
+
+	test loss: 0.0265
+	test acc: 0.9907
+	time: 17.95s
+--------------------------------------------------
+Epoch 96/100:
+	train loss: 0.0209
+	train acc: 0.9944
+	time: 209.22s
+
+	test loss: 0.0283
+	test acc: 0.9898
+	time: 17.81s
+--------------------------------------------------
+Epoch 97/100:
+	train loss: 0.0206
+	train acc: 0.9945
+	time: 209.04s
+
+	test loss: 0.0267
+	test acc: 0.9914
+	time: 17.96s
+--------------------------------------------------
+Epoch 98/100:
+	train loss: 0.0205
+	train acc: 0.9946
+	time: 208.83s
+
+	test loss: 0.0276
+	test acc: 0.9906
+	time: 17.66s
+--------------------------------------------------
+Epoch 99/100:
+	train loss: 0.0203
+	train acc: 0.9945
+	time: 209.27s
+
+	test loss: 0.0263
+	test acc: 0.9918
+	time: 17.71s
+Save best model with test acc 0.9918
+--------------------------------------------------
+Epoch 100/100:
+	train loss: 0.0197
+	train acc: 0.9949
+	time: 209.51s
+
+	test loss: 0.0268
+	test acc: 0.9912
+	time: 17.82s
+--------------------------------------------------
+End training ann on MNIST at 2025-02-11 06:23:39.514301 with best test accuracy 0.9918

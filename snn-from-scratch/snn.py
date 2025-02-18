@@ -98,11 +98,13 @@ def main():
     scaler = amp.GradScaler() if use_amp else None
 
     start_epoch = 0
+    best_acc = 0.
     if pretrained_model:
         try:
             params = torch.load(pretrained_model)
             model.load_state_dict(params['state_dict'])
             start_epoch = params['epoch']
+            best_acc = params['accuracy']
             log_file.write(f"Load pretrained model from {pretrained_model}\n")
         except FileNotFoundError as e:
             log_file.write(f"Pretrained model not found: {pretrained_model}\n")
@@ -111,8 +113,9 @@ def main():
             raise e
 
 
-    best_acc = 0.
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
+    log_file.flush()
+    start_epoch = 45
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
         train_loss = 0.

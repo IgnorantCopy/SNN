@@ -104,11 +104,13 @@ def main():
     test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True)
 
     start_epoch = 0
+    best_acc = 0.
     if pretrained_model:
         try:
             params = torch.load(pretrained_model)
             net.load_state_dict(params['state_dict'])
             start_epoch = params['epoch']
+            best_acc = params['accuracy']
             log_file.write(f"Load pretrained model from {pretrained_model}\n")
         except Exception as e:
             log_file.write(f"Cannot load pretrained model from {pretrained_model}\n")
@@ -147,8 +149,8 @@ def main():
     net.to(device)
 
 
-    best_acc = 0.
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
+    log_file.flush()
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
         net.train()

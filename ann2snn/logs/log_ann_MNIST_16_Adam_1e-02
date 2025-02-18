@@ -1,0 +1,11 @@
+Start training ann on MNIST at 2025-02-19 07:38:01.362175
+Epoch 1/100:
+	train loss: 0.4945
+	train acc: 0.8434
+	time: 265.14s
+
+	test loss: 0.1939
+	test acc: 0.9373
+	time: 15.26s
+Save best model with test acc 0.9373
+--------------------------------------------------

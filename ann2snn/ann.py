@@ -15,12 +15,12 @@ from net import ConvNet
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
-    parser.add_argument("--dataset_root",           default="E:/DataSets/", type=str,   help="path to dataset")
-    parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
-    parser.add_argument("-lr", "--learning_rate",   default=1e-3,           type=float, help="learning rate")
+    parser.add_argument("--dataset_root",           default="D:/DataSets/", type=str,   help="path to dataset")
+    parser.add_argument("--batch_size",             default=16,             type=int,   help="batch size")
+    parser.add_argument("-lr", "--learning_rate",   default=1e-2,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
-    parser.add_argument("--optimizer",              default="SGD",          type=str,   help="optimizer", choices=["SGD", "Adam"])
+    parser.add_argument("--optimizer",              default="Adam",          type=str,   help="optimizer", choices=["SGD", "Adam"])
     parser.add_argument("--gpu",                    default=False,          type=bool,  help="use gpu")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log as a file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to save log")
@@ -103,6 +103,7 @@ def main():
 
     best_acc = 0.0
     log_file.write(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
+    print(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
         train_loss = 0.0
@@ -127,6 +128,10 @@ def main():
                        f"\ttrain loss: {train_loss:.4f}\n"
                        f"\ttrain acc: {train_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n\n")
+        print(f"Epoch {epoch+1}/{epoches}:\n"
+                       f"\ttrain loss: {train_loss:.4f}\n"
+                       f"\ttrain acc: {train_acc:.4f}\n"
+                       f"\ttime: {(end_time - start_time):.2f}s\n\n")
 
         start_time = time.time()
         test_loss = 0.0
@@ -147,6 +152,9 @@ def main():
         log_file.write(f"\ttest loss: {test_loss:.4f}\n"
                        f"\ttest acc: {test_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n")
+        print(f"\ttest loss: {test_loss:.4f}\n"
+                       f"\ttest acc: {test_acc:.4f}\n"
+                       f"\ttime: {(end_time - start_time):.2f}s\n")
 
         if test_acc > best_acc:
             best_acc = test_acc
@@ -156,9 +164,12 @@ def main():
                 "accuracy": test_acc,
             }, os.path.join(model_dir, f"ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}.pth"))
             log_file.write(f"Save best model with test acc {best_acc:.4f}\n")
+            print(f"Save best model with test acc {best_acc:.4f}\n")
         log_file.write('-' * 50 + '\n')
+        print('-' * 50 + '\n')
         log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
+    print(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
     log_file.close()
 
 

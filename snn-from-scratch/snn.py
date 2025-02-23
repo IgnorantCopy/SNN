@@ -115,7 +115,6 @@ def main():
 
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
     log_file.flush()
-    start_epoch = 45
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
         train_loss = 0.

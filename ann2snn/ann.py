@@ -5,6 +5,7 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision import datasets, transforms
+from spikingjelly.activation_based import ann2snn, encoding
 import os
 import sys
 import datetime
@@ -13,11 +14,15 @@ from net import ConvNet
 from tutorial.send_message import send_message
 
 
+
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
     parser.add_argument("--dataset_root",           default="E:/DataSets/", type=str,   help="path to dataset")
     parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
+    parser.add_argument("-m", "--mode",             default="max",          type=str,   help="convert mode",
+                        choices=["max", "99.9%", "1.0/2", "1.0/3", "1.0/4", "1.0/5"])
+    parser.add_argument("-T", "--time_steps",       default=100,            type=int,   help="number of time steps to simulate")
     parser.add_argument("-lr", "--learning_rate",   default=1e-3,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
@@ -35,6 +40,8 @@ def main():
     dataset_name        = args.dataset
     dataset_root        = args.dataset_root
     batch_size          = args.batch_size
+    mode                = args.mode
+    time_steps          = args.time_steps
     lr                  = args.learning_rate
     weight_decay        = args.weight_decay
     epoches             = args.epoches
@@ -162,6 +169,41 @@ def main():
         log_file.write('-' * 50 + '\n')
         log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
+
+
+    converter = ann2snn.Converter(mode=mode, dataloader=train_loader)
+    snn_net = converter(model)
+    log_file.write(f"Converted ANN to SNN at {datetime.datetime.now()}\n")
+
+    device = torch.device("cuda" if use_gpu and torch.cuda.is_available() else "cpu")
+    snn_net.to(device)
+    snn_net.eval()
+    test_loss = 0.
+    test_accuracy = 0.
+    test_samples = 0
+    start_time = time.time()
+    with torch.no_grad():
+        for i, (images, labels) in enumerate(test_loader):
+            images = images.to(device)
+            labels = labels.to(device)
+            labels_onehot = F.one_hot(labels, num_of_labels).float()
+            out_fr = 0.
+            for t in range(time_steps):
+                out_fr += snn_net(images)
+            out_fr /= time_steps
+            loss = F.mse_loss(out_fr, labels_onehot)
+            test_loss += loss.item() * labels.numel()
+            test_accuracy += (out_fr.argmax(dim=1) == labels).sum().item()
+            test_samples += labels.numel()
+        test_loss /= test_samples
+        test_accuracy /= test_samples
+        log_file.write(
+            f"Test loss: {test_loss:.4f}, Test accuracy: {test_accuracy:.4f}, Time elapsed: {time.time() - start_time:.2f} seconds\n")
+    torch.save({
+        "state_dict": snn_net.state_dict(),
+        "accuracy": test_accuracy,
+    }, os.path.join(model_dir, f"snn_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}_{time_steps}_{mode}.pth"))
+    log_file.write(f"Saved SNN model at {datetime.datetime.now()}\n")
     log_file.close()
     send_message()
 

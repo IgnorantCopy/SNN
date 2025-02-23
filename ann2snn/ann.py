@@ -17,7 +17,7 @@ def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
     parser.add_argument("--dataset_root",           default="D:/DataSets/", type=str,   help="path to dataset")
-    parser.add_argument("--batch_size",             default=16,             type=int,   help="batch size")
+    parser.add_argument("--batch_size",             default=128,             type=int,   help="batch size")
     parser.add_argument("-lr", "--learning_rate",   default=1e-2,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")

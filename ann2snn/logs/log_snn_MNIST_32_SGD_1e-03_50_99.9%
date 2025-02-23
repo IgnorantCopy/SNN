@@ -1,0 +1,4 @@
+Loaded ANN model from ./models/ann_MNIST_32_SGD_1e-03.pth with accuracy 0.9925
+Converted ANN to SNN at 2025-02-23 22:35:39.595643
+Test accuracy: 0.9902, Time elapsed: 53.47 seconds
+Saved SNN model at 2025-02-23 22:36:33.068467

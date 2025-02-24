@@ -18,7 +18,7 @@ from tutorial.send_message import send_message
 def config():
     parser = argparse.ArgumentParser(description="Train SNN from scratch", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
-    parser.add_argument("--dataset_root",           default="E:/DataSets",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",           default="D:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-T", "--time_steps",       default=100,            type=int,   help="number of time steps")
     parser.add_argument("-t", "--tau",              default=2.,             type=float, help="time constant of neuron")
     parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")

@@ -83,9 +83,9 @@
 |      --model_dir       |      模型保存目录      |  ./models   |
 |   --pretrained_model   |     预训练模型位置     |    None     |
 
-### 1.3 Hybrid Trainning
+### 1.3 BP+STDP Training
 
-> script: hybrid 文件夹下的 `hybrid.py`
+> script: BP_STDP 文件夹下的 `BP_STDP.py`
 
 参数说明：
 

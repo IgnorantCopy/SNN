@@ -164,4 +164,4 @@ cython_debug/
 tutorial/data
 ann2snn/models
 snn-from-scratch/models
-hybrid/models
+BP_STDP/models

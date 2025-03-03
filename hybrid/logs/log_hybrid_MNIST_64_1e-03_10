@@ -1,0 +1,57 @@
+Start training snn on MNIST at 2025-03-02 21:29:37.821860
+Epoch 1:
+	train loss: 2.3026
+	train acc: 0.0987
+	time: 6473.78s
+
+Epoch 1:
+	test loss: 2.3026
+	test acc: 0.0981
+	time: 35.28s
+
+Save best model with test_acc: 0.0981
+--------------------------------------------------
+Epoch 2:
+	train loss: 2.3026
+	train acc: 0.0987
+	time: 5603.55s
+
+Epoch 2:
+	test loss: 2.3026
+	test acc: 0.0981
+	time: 44.23s
+
+--------------------------------------------------
+Epoch 3:
+	train loss: 2.3026
+	train acc: 0.0987
+	time: 8881.75s
+
+Epoch 3:
+	test loss: 2.3026
+	test acc: 0.0981
+	time: 43.86s
+
+--------------------------------------------------
+Epoch 4:
+	train loss: 2.3026
+	train acc: 0.0987
+	time: 8940.02s
+
+Epoch 4:
+	test loss: 2.3026
+	test acc: 0.0981
+	time: 43.72s
+
+--------------------------------------------------
+Epoch 5:
+	train loss: 2.3026
+	train acc: 0.0987
+	time: 10171.17s
+
+Epoch 5:
+	test loss: 2.3026
+	test acc: 0.0981
+	time: 44.01s
+
+--------------------------------------------------

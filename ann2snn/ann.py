@@ -106,7 +106,6 @@ def main():
 
     log_file.write(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
     log_file.flush()
-    print(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
         train_loss = 0.0
@@ -131,10 +130,6 @@ def main():
                        f"\ttrain loss: {train_loss:.4f}\n"
                        f"\ttrain acc: {train_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n\n")
-        print(f"Epoch {epoch+1}/{epoches}:\n"
-                       f"\ttrain loss: {train_loss:.4f}\n"
-                       f"\ttrain acc: {train_acc:.4f}\n"
-                       f"\ttime: {(end_time - start_time):.2f}s\n\n")
 
         start_time = time.time()
         test_loss = 0.0
@@ -155,9 +150,6 @@ def main():
         log_file.write(f"\ttest loss: {test_loss:.4f}\n"
                        f"\ttest acc: {test_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n")
-        print(f"\ttest loss: {test_loss:.4f}\n"
-                       f"\ttest acc: {test_acc:.4f}\n"
-                       f"\ttime: {(end_time - start_time):.2f}s\n")
 
         if test_acc > best_acc:
             best_acc = test_acc
@@ -167,12 +159,9 @@ def main():
                 "accuracy": test_acc,
             }, os.path.join(model_dir, f"ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}.pth"))
             log_file.write(f"Save best model with test acc {best_acc:.4f}\n")
-            print(f"Save best model with test acc {best_acc:.4f}\n")
         log_file.write('-' * 50 + '\n')
-        print('-' * 50 + '\n')
         log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
-    print(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
     log_file.close()
     send_message()
 

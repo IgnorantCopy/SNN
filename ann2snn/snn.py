@@ -77,7 +77,7 @@ def main():
     snn_net.to(device)
     snn_net.eval()
     total = 0
-    corrects = np.zeros(time_steps)
+    correct = 0
     start_time = time.time()
     with torch.no_grad():
         for i, (images, labels) in enumerate(test_loader):
@@ -91,10 +91,9 @@ def main():
                     out = snn_net(images)
                 else:
                     out += snn_net(images)
-                corrects[t] += (out.argmax(dim=1) == labels).float().sum().item()
             total += out.shape[0]
-        accuracy = corrects / total
-        test_accuracy = accuracy[-1]
+            correct += (torch.argmax(out, dim=1) == labels).sum().item()
+        test_accuracy = correct / total
         log_file.write(f"Test accuracy: {test_accuracy:.4f}, Time elapsed: {time.time() - start_time:.2f} seconds\n")
     torch.save({
         "state_dict": snn_net.state_dict(),

@@ -18,11 +18,12 @@ def config():
     parser.add_argument("--dataset",            default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
     parser.add_argument("--dataset_root",       default="E:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-m", "--mode",         default="max",          type=str,   help="convert mode", choices=["max", "99.9%", "1.0/2", "1.0/3", "1.0/4", "1.0/5"])
-    parser.add_argument("-T", "--time_steps",   default=50,            type=int,   help="number of time steps to simulate")
+    parser.add_argument("-T", "--time_steps",   default=50,             type=int,   help="number of time steps to simulate")
     parser.add_argument("--gpu",                default=False,          type=bool,  help="use GPU")
     parser.add_argument("--log",                default=True,           type=bool,  help="save log file")
     parser.add_argument("--log_dir",            default="./logs",       type=str,   help="path to log directory")
     parser.add_argument("--model_dir",          default="./models",     type=str,   help="path to save model")
+    parser.add_argument('--fine_tune',          default=False,          type=bool,  help='whether to fine tune the SNN model by STDP learning rule')
     return parser.parse_args()
 
 
@@ -38,11 +39,12 @@ def main():
     log_dir         = args.log_dir
     model_dir       = args.model_dir
     batch_size      = int(ann_path.split("_")[-3])
+    fine_tune       = args.fine_tune
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    log_file = open(os.path.join(log_dir, f"log_snn{ann_path[ann_path.rfind('ann')+3:-4]}_{time_steps}_{mode}"), 'w') if save_log else sys.stdout
+    log_file = open(os.path.join(log_dir, f"log_snn{ann_path[ann_path.split('.')[0].rfind('ann')+3:]}_{time_steps}_{mode}"), 'w') if save_log else sys.stdout
 
     if dataset_name == "MNIST":
         image_size = 28
@@ -98,7 +100,7 @@ def main():
     torch.save({
         "state_dict": snn_net.state_dict(),
         "accuracy": test_accuracy,
-    }, os.path.join(model_dir, f"snn{ann_path[ann_path.rfind('ann')+3:]}_{time_steps}_{mode}.pth"))
+    }, os.path.join(model_dir, f"snn{ann_path.split('.')[0][ann_path.rfind('ann')+3:]}_{time_steps}_{mode}.pth"))
     log_file.write(f"Saved SNN model at {datetime.datetime.now()}\n")
     log_file.close()
     send_message()

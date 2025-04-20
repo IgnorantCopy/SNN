@@ -44,7 +44,7 @@ def main():
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
 
-    log_file = open(os.path.join(log_dir, f"log_snn{ann_path[ann_path.split('.')[0].rfind('ann')+3:]}_{time_steps}_{mode}"), 'w') if save_log else sys.stdout
+    log_file = open(os.path.join(log_dir, f"log_snn{ann_path[ann_path.split('.')[1].rfind('ann')+3:]}_{time_steps}_{mode}"), 'w') if save_log else sys.stdout
 
     if dataset_name == "MNIST":
         image_size = 28

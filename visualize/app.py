@@ -1,6 +1,7 @@
 from flask import Flask, request
 import base64
 import os
+import datetime
 from flask_cors import CORS
 import torch
 from torch.utils.data import DataLoader
@@ -91,7 +92,8 @@ def save_canvas():
             data = data.split(',')[1]
 
         image_data = base64.b64decode(data)
-        file_name = os.path.join(SAVE_DIR, 'image.png')
+        now = datetime.datetime.now()
+        file_name = os.path.join(SAVE_DIR, f'{now.strftime("%Y%m%d_%H%M%S")}.png')
         with open(file_name, 'wb') as f:
             f.write(image_data)
 

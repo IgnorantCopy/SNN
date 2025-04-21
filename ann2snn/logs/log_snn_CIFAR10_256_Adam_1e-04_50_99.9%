@@ -1,0 +1,2 @@
+Loaded ANN model from ./models/ann_CIFAR10_256_Adam_1e-04.pth with accuracy 0.766
+Converted ANN to SNN at 2025-04-20 21:31:38.169739

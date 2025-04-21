@@ -17,7 +17,7 @@ from tutorial.send_message import send_message
 def config():
     parser = argparse.ArgumentParser(description="Train SNN by BP + STDP", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
-    parser.add_argument("--dataset_root",           default="E:/DataSets",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",           default="D:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-T", "--time_steps",       default=10,             type=int,   help="number of time steps")
     parser.add_argument("--tau_pre",                default=2.,             type=float, help="time constant of presynaptic neuron")
     parser.add_argument("--tau_post",               default=100.,           type=float, help="time constant of postsynaptic neuron")
@@ -25,7 +25,7 @@ def config():
     parser.add_argument("-lr", "--learning_rate",   default=1e-3,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
-    parser.add_argument("--gpu",                    default=False,          type=bool,  help="use gpu")
+    parser.add_argument("--gpu",                    default=True,          type=bool,  help="use gpu")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to log directory")
     parser.add_argument("--model_dir",              default="./models",     type=str,   help="path to model directory")

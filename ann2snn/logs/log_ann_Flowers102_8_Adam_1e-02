@@ -1,0 +1,38 @@
+Start training ann on Flowers102 at 2025-04-17 12:30:37.479251
+Epoch 1/100:
+	train loss: 20.5900
+	train acc: 0.0223
+	time: 53.00s
+
+	test loss: 5.6347
+	test acc: 0.0098
+	time: 10.42s
+Save best model with test acc 0.0098
+--------------------------------------------------
+Epoch 2/100:
+	train loss: 4.5387
+	train acc: 0.0340
+	time: 52.00s
+
+	test loss: 4.8140
+	test acc: 0.0098
+	time: 8.85s
+--------------------------------------------------
+Epoch 3/100:
+	train loss: 4.4664
+	train acc: 0.0356
+	time: 54.62s
+
+	test loss: 4.7880
+	test acc: 0.0098
+	time: 8.70s
+--------------------------------------------------
+Epoch 4/100:
+	train loss: 4.4601
+	train acc: 0.0363
+	time: 59.70s
+
+	test loss: 4.8818
+	test acc: 0.0098
+	time: 9.30s
+--------------------------------------------------

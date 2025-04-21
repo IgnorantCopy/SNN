@@ -26,7 +26,7 @@ def config():
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
     parser.add_argument("--optimizer",              default="Adam",         type=str,   help="optimizer", choices=["Adam", "SGD"])
-    parser.add_argument("--cupy",                   default=False,          type=bool,  help="use cupy for GPU acceleration")
+    parser.add_argument("--cupy",                   default=True,          type=bool,  help="use cupy for GPU acceleration")
     parser.add_argument("--amp",                    default=False,          type=bool,  help="use automatic mixed precision")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to log directory")
@@ -114,6 +114,7 @@ def main():
 
 
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
+    print(f"Start training snn on {dataset_name} at {datetime.datetime.now()}")
     log_file.flush()
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
@@ -150,6 +151,10 @@ def main():
                        f"\ttrain_loss: {train_loss:.4f}\n"
                        f"\ttrain_acc: {train_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n\n")
+        print(f"Epoch {epoch+1}:\n"
+                       f"\ttrain_loss: {train_loss:.4f}\n"
+                       f"\ttrain_acc: {train_acc:.4f}\n"
+                       f"\ttime: {time.time() - start_time:.2f}s\n")
         lr_scheduler.step(train_loss)
 
         model.eval()
@@ -175,6 +180,9 @@ def main():
         log_file.write(f"\ttest_loss: {test_loss:.4f}\n"
                        f"\ttest_acc: {test_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n")
+        print(f"\ttest_loss: {test_loss:.4f}\n"
+                       f"\ttest_acc: {test_acc:.4f}\n"
+                       f"\ttime: {time.time() - start_time:.2f}s")
 
         if test_acc > best_acc:
             best_acc = test_acc
@@ -184,9 +192,12 @@ def main():
                 "accuracy": test_acc,
             }, os.path.join(model_dir, f"snn_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}_{time_steps}.pth"))
             log_file.write(f"Save best model with test_acc: {best_acc:.4f}\n")
+            print(f"Save best model with test_acc: {best_acc:.4f}")
         log_file.write('-' * 50 + '\n')
+        print('-' * 50)
         log_file.flush()
     log_file.write(f"End training snn on {dataset_name} at {datetime.datetime.now()} with best test_acc {best_acc:.4f}\n")
+    print(f"End training snn on {dataset_name} at {datetime.datetime.now()} with best test_acc {best_acc:.4f}")
     log_file.close()
     send_message()
 

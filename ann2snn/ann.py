@@ -1,8 +1,9 @@
 import argparse
+import pandas as pd
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
-from torch.utils.data import DataLoader
+from torch.utils.data import Dataset, DataLoader, random_split
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision import datasets, transforms
 import os
@@ -11,11 +12,12 @@ import datetime
 import time
 from net import ConvNet
 from tutorial.send_message import send_message
+from PIL import Image
 
 
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
+    parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "Flowers102", "CIFAR10", "Flowers"])
     parser.add_argument("--dataset_root",           default="D:/DataSets/", type=str,   help="path to dataset")
     parser.add_argument("--batch_size",             default=128,             type=int,   help="batch size")
     parser.add_argument("-lr", "--learning_rate",   default=1e-2,           type=float, help="learning rate")
@@ -67,6 +69,89 @@ def main():
         train_dataset = datasets.MNIST(root=dataset_root, train=True, transform=transform_train, download=True)
         test_dataset = datasets.MNIST(root=dataset_root, train=False, transform=transform_test, download=True)
         model = ConvNet(num_of_labels, image_size, batch_size, 1)
+    elif dataset_name == "Flowers102":
+        num_of_labels = 102
+        image_size = 224
+        transform_train = transforms.Compose([
+            transforms.CenterCrop(image_size),
+            transforms.RandomRotation(45),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        transform_test = transforms.Compose([
+            transforms.CenterCrop(image_size),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        train_dataset = datasets.Flowers102(root=dataset_root, split="test", transform=transform_train, download=True)
+        test_dataset = datasets.Flowers102(root=dataset_root, split="train", transform=transform_test, download=True)
+        model = ConvNet(num_of_labels, image_size, batch_size, 3)
+    elif dataset_name == "CIFAR10":
+        num_of_labels = 10
+        image_size = 32
+        transform_train = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(45),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        train_dataset = datasets.CIFAR10(root=dataset_root+"CIFAR10", train=True, transform=transform_train, download=True)
+        test_dataset = datasets.CIFAR10(root=dataset_root+"CIFAR10", train=False, transform=transform_test, download=True)
+        model = ConvNet(num_of_labels, image_size, batch_size, 3)
+    elif dataset_name == "Flowers":
+        num_of_labels = 16
+        image_size = 224
+        path = str(dataset_root)+"flowers"
+        labels = ["astilbe", "bellflower", "black_eyed_susan", "calendula", "california_poppy", "carnation",
+                "common_daisy", "coreopsis", "daffodil", "dandelion", "iris", "magnolia", "rose", "sunflower",
+                "tulip", "water_lily"]
+        data = []
+        for label in labels:
+            img_dir = os.path.join(path, label)
+            image_names = os.listdir(img_dir)
+            for image_name in image_names:
+                img_path = os.path.join(img_dir, image_name)
+                data.append({"image_path": img_path, "label": label})
+        data = pd.DataFrame(data)
+        data["label"] = data["label"].map({label: i for i, label in enumerate(labels)})
+        data.head()
+
+        class FlowerDataset(Dataset):
+            def __init__(self, data, transform=None):
+                self.data = data
+                self.transform = transform
+
+            def __len__(self):
+                return len(self.data)
+
+            def __getitem__(self, index):
+                img_path = self.data.iloc[index]["image_path"]
+                label = self.data.iloc[index]["label"]
+                image = Image.open(img_path)
+                if self.transform:
+                    image = self.transform(image)
+                return image, label
+
+        transforms_ = transforms.Compose([
+            transforms.Resize(256),
+            transforms.CenterCrop(image_size),
+            transforms.RandomRotation(15),
+            transforms.RandomHorizontalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        dataset = FlowerDataset(data, transform=transforms_)
+        train_dataset, test_dataset = random_split(dataset, [13000, 2740])
+
+        model = ConvNet(num_of_labels, image_size, batch_size, 3)
     else:
         log_file.write(f"Invalid dataset name: {dataset_name}\n")
         log_file.close()
@@ -87,7 +172,7 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() and use_gpu else "cpu")
     model.to(device)
-
+    print("device:", device)
     start_epoch = 0
     best_acc = 0.0
     if pretrained_model:
@@ -105,6 +190,7 @@ def main():
 
 
     log_file.write(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
+    print(f"Start training ann on {dataset_name} at {datetime.datetime.now()}")
     log_file.flush()
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
@@ -130,6 +216,10 @@ def main():
                        f"\ttrain loss: {train_loss:.4f}\n"
                        f"\ttrain acc: {train_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n\n")
+        print(f"Epoch {epoch+1}/{epoches}:\n"
+                       f"\ttrain loss: {train_loss:.4f}\n"
+                       f"\ttrain acc: {train_acc:.4f}\n"
+                       f"\ttime: {(end_time - start_time):.2f}s\n")
 
         start_time = time.time()
         test_loss = 0.0
@@ -150,6 +240,9 @@ def main():
         log_file.write(f"\ttest loss: {test_loss:.4f}\n"
                        f"\ttest acc: {test_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n")
+        print(f"\ttest loss: {test_loss:.4f}\n"
+                       f"\ttest acc: {test_acc:.4f}\n"
+                       f"\ttime: {(end_time - start_time):.2f}s")
 
         if test_acc > best_acc:
             best_acc = test_acc
@@ -159,9 +252,12 @@ def main():
                 "accuracy": test_acc,
             }, os.path.join(model_dir, f"ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}.pth"))
             log_file.write(f"Save best model with test acc {best_acc:.4f}\n")
+            print(f"Save best model with test acc {best_acc:.4f}")
         log_file.write('-' * 50 + '\n')
+        print('-' * 50)
         log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
+    print(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}")
     log_file.close()
     send_message()
 

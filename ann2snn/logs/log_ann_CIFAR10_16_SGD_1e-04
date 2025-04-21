@@ -1,0 +1,11 @@
+Start training ann on CIFAR10 at 2025-04-21 20:52:40.658936
+Epoch 1/100:
+	train loss: 2.1502
+	train acc: 0.2078
+	time: 28.08s
+
+	test loss: 1.9885
+	test acc: 0.3124
+	time: 13.57s
+Save best model with test acc 0.3124
+--------------------------------------------------

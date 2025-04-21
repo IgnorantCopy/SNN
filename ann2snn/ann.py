@@ -18,7 +18,7 @@ from PIL import Image
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "Flowers102", "CIFAR10", "Flowers"])
-    parser.add_argument("--dataset_root",           default="D:/DataSets/", type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",           default="E:/DataSets/", type=str,   help="path to dataset")
     parser.add_argument("--batch_size",             default=128,             type=int,   help="batch size")
     parser.add_argument("-lr", "--learning_rate",   default=1e-2,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
@@ -172,7 +172,6 @@ def main():
 
     device = torch.device("cuda" if torch.cuda.is_available() and use_gpu else "cpu")
     model.to(device)
-    print("device:", device)
     start_epoch = 0
     best_acc = 0.0
     if pretrained_model:
@@ -190,7 +189,6 @@ def main():
 
 
     log_file.write(f"Start training ann on {dataset_name} at {datetime.datetime.now()}\n")
-    print(f"Start training ann on {dataset_name} at {datetime.datetime.now()}")
     log_file.flush()
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
@@ -216,10 +214,6 @@ def main():
                        f"\ttrain loss: {train_loss:.4f}\n"
                        f"\ttrain acc: {train_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n\n")
-        print(f"Epoch {epoch+1}/{epoches}:\n"
-                       f"\ttrain loss: {train_loss:.4f}\n"
-                       f"\ttrain acc: {train_acc:.4f}\n"
-                       f"\ttime: {(end_time - start_time):.2f}s\n")
 
         start_time = time.time()
         test_loss = 0.0
@@ -240,9 +234,6 @@ def main():
         log_file.write(f"\ttest loss: {test_loss:.4f}\n"
                        f"\ttest acc: {test_acc:.4f}\n"
                        f"\ttime: {(end_time - start_time):.2f}s\n")
-        print(f"\ttest loss: {test_loss:.4f}\n"
-                       f"\ttest acc: {test_acc:.4f}\n"
-                       f"\ttime: {(end_time - start_time):.2f}s")
 
         if test_acc > best_acc:
             best_acc = test_acc
@@ -252,12 +243,9 @@ def main():
                 "accuracy": test_acc,
             }, os.path.join(model_dir, f"ann_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}.pth"))
             log_file.write(f"Save best model with test acc {best_acc:.4f}\n")
-            print(f"Save best model with test acc {best_acc:.4f}")
         log_file.write('-' * 50 + '\n')
-        print('-' * 50)
         log_file.flush()
     log_file.write(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}\n")
-    print(f"End training ann on {dataset_name} at {datetime.datetime.now()} with best test accuracy {best_acc:.4f}")
     log_file.close()
     send_message()
 

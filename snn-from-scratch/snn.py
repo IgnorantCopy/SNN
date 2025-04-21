@@ -18,7 +18,7 @@ from tutorial.send_message import send_message
 def config():
     parser = argparse.ArgumentParser(description="Train SNN from scratch", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
-    parser.add_argument("--dataset_root",           default="D:/DataSets",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",           default="E:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-T", "--time_steps",       default=100,            type=int,   help="number of time steps")
     parser.add_argument("-t", "--tau",              default=2.,             type=float, help="time constant of neuron")
     parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
@@ -114,7 +114,6 @@ def main():
 
 
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
-    print(f"Start training snn on {dataset_name} at {datetime.datetime.now()}")
     log_file.flush()
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
@@ -151,10 +150,6 @@ def main():
                        f"\ttrain_loss: {train_loss:.4f}\n"
                        f"\ttrain_acc: {train_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n\n")
-        print(f"Epoch {epoch+1}:\n"
-                       f"\ttrain_loss: {train_loss:.4f}\n"
-                       f"\ttrain_acc: {train_acc:.4f}\n"
-                       f"\ttime: {time.time() - start_time:.2f}s\n")
         lr_scheduler.step(train_loss)
 
         model.eval()
@@ -180,9 +175,6 @@ def main():
         log_file.write(f"\ttest_loss: {test_loss:.4f}\n"
                        f"\ttest_acc: {test_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n")
-        print(f"\ttest_loss: {test_loss:.4f}\n"
-                       f"\ttest_acc: {test_acc:.4f}\n"
-                       f"\ttime: {time.time() - start_time:.2f}s")
 
         if test_acc > best_acc:
             best_acc = test_acc
@@ -192,12 +184,9 @@ def main():
                 "accuracy": test_acc,
             }, os.path.join(model_dir, f"snn_{dataset_name}_{batch_size}_{optimizer_name}_{lr:.0e}_{time_steps}.pth"))
             log_file.write(f"Save best model with test_acc: {best_acc:.4f}\n")
-            print(f"Save best model with test_acc: {best_acc:.4f}")
         log_file.write('-' * 50 + '\n')
-        print('-' * 50)
         log_file.flush()
     log_file.write(f"End training snn on {dataset_name} at {datetime.datetime.now()} with best test_acc {best_acc:.4f}\n")
-    print(f"End training snn on {dataset_name} at {datetime.datetime.now()} with best test_acc {best_acc:.4f}")
     log_file.close()
     send_message()
 

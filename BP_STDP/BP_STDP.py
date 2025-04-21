@@ -27,7 +27,7 @@ def config():
     parser.add_argument("-lr", "--learning_rate",   default=1e-3,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
-    parser.add_argument("--fine_tune_start_epoch",  default=70,             type=int,   help="when to start fine-tuning")
+    parser.add_argument("--fine_tune_epoch",        default=20,             type=int,   help="epoches for fine-tuning")
     parser.add_argument("--gpu",                    default=False,          type=bool,  help="use gpu")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to log directory")
@@ -51,7 +51,7 @@ def main():
     lr                  = args.learning_rate
     weight_decay        = args.weight_decay
     epoches             = args.epoches
-    fine_tune_epoch     = args.fine_tune_start_epoch
+    fine_tune_epoch     = args.fine_tune_epoch
     use_gpu             = args.gpu
     save_log            = args.log
     log_dir             = args.log_dir
@@ -112,7 +112,7 @@ def main():
     best_params = copy.deepcopy(net.state_dict())
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
     log_file.flush()
-    for epoch in range(start_epoch, fine_tune_epoch):
+    for epoch in range(start_epoch, epoches):
         start_time = time.time()
         net.train()
         train_loss = 0.
@@ -209,7 +209,7 @@ def main():
     log_file.write(f"Start fine-tuning snn on {dataset_name} at {datetime.datetime.now()}\n")
     log_file.flush()
     net.load_state_dict(best_params)
-    for epoch in range(fine_tune_epoch, epoches):
+    for epoch in range(epoches, epoches + fine_tune_epoch):
         start_time = time.time()
         net.train()
         train_loss = 0.

@@ -16,7 +16,7 @@ def config():
     parser = argparse.ArgumentParser(description='Convert ANN to SNN', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--ann",                                        type=str,   help="path to ANN model", required=True)
     parser.add_argument("--dataset",            default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "CIFAR10"])
-    parser.add_argument("--dataset_root",       default="D:/DataSets",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",       default="E:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-m", "--mode",         default="max",          type=str,   help="convert mode", choices=["max", "99.9%", "1.0/2", "1.0/3", "1.0/4", "1.0/5"])
     parser.add_argument("-T", "--time_steps",   default=50,             type=int,   help="number of time steps to simulate")
     parser.add_argument("--gpu",                default=False,          type=bool,  help="use GPU")
@@ -89,11 +89,9 @@ def main():
     params = torch.load(ann_path)
     ann_net.load_state_dict(params["state_dict"])
     log_file.write(f"Loaded ANN model from {ann_path} with accuracy {params['accuracy']}\n")
-    print(f"Loaded ANN model from {ann_path} with accuracy {params['accuracy']}")
     converter = ann2snn.Converter(mode=mode, dataloader=train_loader)
     snn_net = converter(ann_net)
     log_file.write(f"Converted ANN to SNN at {datetime.datetime.now()}\n")
-    print(f"Converted ANN to SNN at {datetime.datetime.now()}")
 
     device = torch.device("cuda" if use_gpu and torch.cuda.is_available() else "cpu")
     snn_net.to(device)
@@ -117,13 +115,11 @@ def main():
             correct += (torch.argmax(out, dim=1) == labels).sum().item()
         test_accuracy = correct / total
         log_file.write(f"Test accuracy: {test_accuracy:.4f}, Time elapsed: {time.time() - start_time:.2f} seconds\n")
-        print(f"Test accuracy: {test_accuracy:.4f}, Time elapsed: {time.time() - start_time:.2f} seconds")
     torch.save({
         "state_dict": snn_net.state_dict(),
         "accuracy": test_accuracy,
     }, os.path.join(model_dir, f"snn{ann_path.split('.')[0][ann_path.rfind('ann')+3:]}_{time_steps}_{mode}.pth"))
     log_file.write(f"Saved SNN model at {datetime.datetime.now()}\n")
-    print(f"Saved SNN model at {datetime.datetime.now()}")
     log_file.close()
     send_message()
 

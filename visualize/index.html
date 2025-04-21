@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: 'led regular';
+            src: url('./fonts/LED.ttf');
+        }
+
+        canvas {
+            border: 1px solid #ccc;
+
+        }
+
+        button.active {
+            color: #fff;
+            background-color: orange;
+        }
+
+        article {
+            float: left;
+            width: 50%;
+            height: 700px;
+            text-align: center;
+        }
+
+        aside {
+            float: right;
+            width: 50%;
+            height: 600px;
+            text-align: center;
+            color: #f00;
+            display:-webkit-box;
+            display:-moz-box;
+            display:-ms-flexbox;
+            display: -webkit-flex;
+            display:flex;
+            -webkit-align-items:center;
+            align-items:center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            font-family: 'led regular',serif;
+            font-size: 400px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+<div>
+    <article>
+        <canvas id="canvas">
+            当前浏览器不支持canvas
+            <a href="https://www.google.cn/chrome/index.html">下载支持canvas的浏览器</a>
+        </canvas>
+        <div class="toolBar">
+            <div>
+                <span>color: </span>
+                <input type="color" name="" id="color" value="">
+            </div>
+            <div class="tool">
+                <button id="boldBtn" type="button">pen</button>
+                <button id="saveBtn" type="button">predict</button>
+                <button id="clearBtn" type="button">eraser</button>
+                <button id="nullBtn" type="button">clear</button>
+            </div>
+        </div>
+    </article>
+    <aside id="labelDisplay">8</aside>
+</div>
+
+
+<script>
+    let canvas = document.getElementById("canvas")
+    let context = canvas.getContext("2d")
+    let boldBtn = document.getElementById("boldBtn")
+    let saveBtn = document.getElementById("saveBtn")
+    let clearBtn = document.getElementById("clearBtn")
+    let nullBtn = document.getElementById("nullBtn")
+    let inputColor = document.getElementById("color")
+    let labelDisplay = document.getElementById("labelDisplay")
+
+    let isDraw = false;
+    const width = 600;
+    const height = 600;
+    const lineWidth = 30;
+    canvas.width = width;
+    canvas.height = height;
+
+    context.lineJoin = 'round';
+    context.lineCap = 'round';
+    context.lineWidth = lineWidth;
+    context.strokeStyle = 'black';
+
+    boldBtn.classList.add('active');
+
+    canvas.onmousedown = function () {
+        isDraw = true;
+        context.beginPath();
+        let x = event.pageX - canvas.offsetLeft;
+        let y = event.pageY - canvas.offsetTop;
+        context.moveTo(x, y);
+    }
+    canvas.onmouseleave = function () {
+        isDraw = false;
+        context.closePath();
+    }
+    canvas.onmouseup = function () {
+        isDraw = false;
+        context.closePath();
+    }
+    canvas.onmousemove = function () {
+        if (isDraw) {
+            let x = event.pageX - canvas.offsetLeft;
+            let y = event.pageY - canvas.offsetTop;
+            context.lineTo(x, y);
+            context.stroke();
+        }
+    }
+    boldBtn.onclick = function () {
+        context.globalCompositeOperation = 'source-over';
+        context.lineWidth = lineWidth;
+        boldBtn.classList.add('active');
+        clearBtn.classList.remove('active');
+    }
+    saveBtn.onclick = async () => {
+        const dataUrl = canvas.toDataURL('image/png');
+        try {
+            const response = await fetch('http://10.54.36.75:5000/save_canvas', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ data: dataUrl })
+            });
+            const result = await response.json();
+            labelDisplay.textContent = result.message;
+        } catch (error) {
+            console.error('Error:', error);
+        }
+    }
+    clearBtn.onclick = function () {
+        context.globalCompositeOperation = 'destination-out';
+        context.lineWidth = 20;
+        clearBtn.classList.add('active');
+        boldBtn.classList.remove('active');
+    }
+    nullBtn.onclick = function () {
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    inputColor.onchange = function () {
+        context.strokeStyle = this.value;
+    }
+
+</script>
+</body>
+
+</html>

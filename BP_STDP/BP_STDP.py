@@ -201,8 +201,8 @@ def main():
         if p not in params_stdp_set:
             params_gd.append(p)
 
-    optimizer_gd = Adam(params_gd, lr=lr, weight_decay=weight_decay)
-    optimizer_stdp = SGD(params_stdp, lr=lr, momentum=0., weight_decay=weight_decay)
+    optimizer_gd = Adam(params_gd, lr=lr_scheduler.get_last_lr()[0], weight_decay=weight_decay)
+    optimizer_stdp = SGD(params_stdp, lr=lr_scheduler.get_last_lr()[0], momentum=0., weight_decay=weight_decay)
     gd_lr_scheduler = ReduceLROnPlateau(optimizer_gd, mode='min', patience=5)
     stdp_lr_scheduler = ReduceLROnPlateau(optimizer_stdp, mode='min', patience=5)
 

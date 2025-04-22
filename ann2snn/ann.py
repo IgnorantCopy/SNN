@@ -23,7 +23,7 @@ def config():
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
     parser.add_argument("--optimizer",              default="Adam",          type=str,   help="optimizer", choices=["SGD", "Adam"])
-    parser.add_argument("--gpu",                    default=False,          type=bool,  help="use gpu")
+    parser.add_argument("--gpu",                    default=True,          type=bool,  help="use gpu")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log as a file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to save log")
     parser.add_argument("--model_dir",              default="./models",     type=str,   help="path to save model")

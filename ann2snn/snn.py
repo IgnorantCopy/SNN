@@ -114,11 +114,9 @@ def main():
     params = torch.load(ann_path)
     ann_net.load_state_dict(params["state_dict"])
     log_file.write(f"Loaded ANN model from {ann_path} with accuracy {params['accuracy']}\n")
-    print(f"Loaded ANN model from {ann_path} with accuracy {params['accuracy']}")
     converter = ann2snn.Converter(mode=mode, dataloader=train_loader)
     snn_net = converter(ann_net)
     log_file.write(f"Converted ANN to SNN at {datetime.datetime.now()}\n")
-    print(f"Converted ANN to SNN at {datetime.datetime.now()}")
 
     device = torch.device("cuda" if use_gpu and torch.cuda.is_available() else "cpu")
     snn_net.to(device)
@@ -142,13 +140,11 @@ def main():
             correct += (torch.argmax(out, dim=1) == labels).sum().item()
         test_accuracy = correct / total
         log_file.write(f"Test accuracy: {test_accuracy:.4f}, Time elapsed: {time.time() - start_time:.2f} seconds\n")
-        print(f"Test accuracy: {test_accuracy:.4f}, Time elapsed: {time.time() - start_time:.2f} seconds")
     torch.save({
         "state_dict": snn_net.state_dict(),
         "accuracy": test_accuracy,
     }, os.path.join(model_dir, f"snn{ann_path.split('.')[0][ann_path.rfind('ann')+3:]}_{time_steps}_{mode}.pth"))
     log_file.write(f"Saved SNN model at {datetime.datetime.now()}\n")
-    print(f"Saved SNN model at {datetime.datetime.now()}")
     log_file.close()
     send_message()
 

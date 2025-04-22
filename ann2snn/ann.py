@@ -1,9 +1,8 @@
 import argparse
-import pandas as pd
 import torch
 import torch.optim as optim
 import torch.nn.functional as F
-from torch.utils.data import Dataset, DataLoader, random_split
+from torch.utils.data import DataLoader
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 from torchvision import datasets, transforms
 import os
@@ -12,19 +11,19 @@ import datetime
 import time
 from net import ConvNet
 from tutorial.send_message import send_message
-from PIL import Image
+from data import FlowerDataset, Data
 
 
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "Flowers102", "CIFAR10", "Flowers"])
     parser.add_argument("--dataset_root",           default="D:/DataSets/", type=str,   help="path to dataset")
-    parser.add_argument("--batch_size",             default=128,             type=int,   help="batch size")
-    parser.add_argument("-lr", "--learning_rate",   default=1e-2,           type=float, help="learning rate")
+    parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
+    parser.add_argument("-lr", "--learning_rate",   default=1e-3,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
     parser.add_argument("--optimizer",              default="Adam",          type=str,   help="optimizer", choices=["SGD", "Adam"])
-    parser.add_argument("--gpu",                    default=False,          type=bool,  help="use gpu")
+    parser.add_argument("--gpu",                    default=True,          type=bool,  help="use gpu")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log as a file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to save log")
     parser.add_argument("--model_dir",              default="./models",     type=str,   help="path to save model")
@@ -71,9 +70,10 @@ def main():
         model = ConvNet(num_of_labels, image_size, batch_size, 1)
     elif dataset_name == "Flowers102":
         num_of_labels = 102
-        image_size = 224
+        image_size = 32
         transform_train = transforms.Compose([
-            transforms.CenterCrop(image_size),
+            transforms.Resize(size=(image_size, image_size)),
+            # transforms.CenterCrop(image_size),
             transforms.RandomRotation(45),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
@@ -81,7 +81,8 @@ def main():
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
         transform_test = transforms.Compose([
-            transforms.CenterCrop(image_size),
+            transforms.Resize(size=(image_size, image_size)),
+            # transforms.CenterCrop(image_size),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
@@ -93,7 +94,7 @@ def main():
         image_size = 32
         transform_train = transforms.Compose([
             transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(45),
+            transforms.RandomRotation(15),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
             transforms.ToTensor(),
@@ -108,48 +109,28 @@ def main():
         model = ConvNet(num_of_labels, image_size, batch_size, 3)
     elif dataset_name == "Flowers":
         num_of_labels = 16
-        image_size = 224
-        path = str(dataset_root)+"flowers"
-        labels = ["astilbe", "bellflower", "black_eyed_susan", "calendula", "california_poppy", "carnation",
-                "common_daisy", "coreopsis", "daffodil", "dandelion", "iris", "magnolia", "rose", "sunflower",
-                "tulip", "water_lily"]
-        data = []
-        for label in labels:
-            img_dir = os.path.join(path, label)
-            image_names = os.listdir(img_dir)
-            for image_name in image_names:
-                img_path = os.path.join(img_dir, image_name)
-                data.append({"image_path": img_path, "label": label})
-        data = pd.DataFrame(data)
-        data["label"] = data["label"].map({label: i for i, label in enumerate(labels)})
-        data.head()
+        image_size = 32
+        data = Data(dataset_name, dataset_root)
+        train_data = data.sample(frac=0.8, random_state=2025)
+        test_data = data.drop(train_data.index)
 
-        class FlowerDataset(Dataset):
-            def __init__(self, data, transform=None):
-                self.data = data
-                self.transform = transform
-
-            def __len__(self):
-                return len(self.data)
-
-            def __getitem__(self, index):
-                img_path = self.data.iloc[index]["image_path"]
-                label = self.data.iloc[index]["label"]
-                image = Image.open(img_path)
-                if self.transform:
-                    image = self.transform(image)
-                return image, label
-
-        transforms_ = transforms.Compose([
-            transforms.Resize(256),
-            transforms.CenterCrop(image_size),
+        train_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            # transforms.CenterCrop(image_size),
             transforms.RandomRotation(15),
             transforms.RandomHorizontalFlip(),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
             transforms.ToTensor(),
             transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
-        dataset = FlowerDataset(data, transform=transforms_)
-        train_dataset, test_dataset = random_split(dataset, [13000, 2740])
+        test_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        train_dataset = FlowerDataset(train_data, train_transforms)
+        test_dataset = FlowerDataset(test_data, test_transforms)
 
         model = ConvNet(num_of_labels, image_size, batch_size, 3)
     else:
@@ -157,8 +138,8 @@ def main():
         log_file.close()
         raise ValueError("Invalid dataset name")
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
     if optimizer_name == "SGD":
         optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=weight_decay)

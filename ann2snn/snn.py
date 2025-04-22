@@ -2,7 +2,6 @@ from spikingjelly.activation_based import ann2snn
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
-import numpy as np
 import argparse
 import sys
 import os
@@ -10,12 +9,13 @@ import time
 import datetime
 from net import ConvNet
 from tutorial.send_message import send_message
+from data import FlowerDataset, Data
 
 
 def config():
     parser = argparse.ArgumentParser(description='Convert ANN to SNN', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--ann",                                        type=str,   help="path to ANN model", required=True)
-    parser.add_argument("--dataset",            default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "CIFAR10"])
+    parser.add_argument("--dataset",            default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "CIFAR10", "Flowers"])
     parser.add_argument("--dataset_root",       default="D:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-m", "--mode",         default="max",          type=str,   help="convert mode", choices=["max", "99.9%", "1.0/2", "1.0/3", "1.0/4", "1.0/5"])
     parser.add_argument("-T", "--time_steps",   default=50,             type=int,   help="number of time steps to simulate")
@@ -78,6 +78,31 @@ def main():
         ])
         train_dataset = datasets.CIFAR10(root=dataset_root + "/CIFAR10", train=True, transform=transform_train, download=True)
         test_dataset = datasets.CIFAR10(root=dataset_root + "/CIFAR10", train=False, transform=transform_test, download=True)
+        ann_net = ConvNet(num_of_labels, image_size, batch_size, 3)
+    elif dataset_name == "Flowers":
+        num_of_labels = 16
+        image_size = 32
+        data = Data(dataset_name, dataset_root)
+        train_data = data.sample(frac=0.8, random_state=2025)
+        test_data = data.drop(train_data.index)
+
+        train_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.RandomRotation(15),
+            transforms.RandomHorizontalFlip(),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        test_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        train_dataset = FlowerDataset(train_data, train_transforms)
+        test_dataset = FlowerDataset(test_data, test_transforms)
+
         ann_net = ConvNet(num_of_labels, image_size, batch_size, 3)
     else:
         log_file.write(f"Invalid dataset name: {dataset_name}\n")

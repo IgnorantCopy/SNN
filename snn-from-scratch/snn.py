@@ -12,13 +12,14 @@ import os
 import time
 import datetime
 from net import ConvSNN
+from data import FlowerDataset, Data
 from tutorial.send_message import send_message
 
 
 def config():
     parser = argparse.ArgumentParser(description="Train SNN from scratch", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
-    parser.add_argument("--dataset_root",           default="D:/DataSets",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "CIFAR10", "Flowers"])
+    parser.add_argument("--dataset_root",           default="D:/DataSets/",  type=str,   help="path to dataset")
     parser.add_argument("-T", "--time_steps",       default=100,            type=int,   help="number of time steps")
     parser.add_argument("-t", "--tau",              default=2.,             type=float, help="time constant of neuron")
     parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
@@ -74,6 +75,50 @@ def main():
         train_dataset = datasets.MNIST(root=dataset_root, train=True, download=True, transform=transform_train)
         test_dataset = datasets.MNIST(root=dataset_root, train=False, download=True, transform=transform_test)
         model = ConvSNN(time_steps, tau, batch_size, 1, num_of_labels, image_size, use_cupy)
+    elif dataset_name == "CIFAR10":
+        num_of_labels = 10
+        image_size = 32
+        transform_train = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(45),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        train_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=True, transform=transform_train,
+                                        download=True)
+        test_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=False, transform=transform_test,
+                                        download=True)
+        model = ConvSNN(time_steps, tau, batch_size, 3, num_of_labels, image_size, use_cupy)
+    elif dataset_name == "Flowers":
+        num_of_labels = 16
+        image_size = 32
+        data = Data(dataset_name, dataset_root)
+        train_data = data.sample(frac=0.8, random_state=2025)
+        test_data = data.drop(train_data.index)
+
+        train_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.RandomRotation(15),
+            transforms.RandomHorizontalFlip(),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        test_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        train_dataset = FlowerDataset(train_data, train_transforms)
+        test_dataset = FlowerDataset(test_data, test_transforms)
+        model = ConvSNN(time_steps, tau, batch_size, 3, num_of_labels, image_size, use_cupy)
     else:
         log_file.write(f"Invalid dataset name: {dataset_name}\n")
         log_file.close()

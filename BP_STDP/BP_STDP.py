@@ -179,7 +179,7 @@ def main():
         log_file.flush()
 
 
-    instances_stdp = (layer.Conv2d,)
+    instances_stdp = (layer.Conv2d, layer.Linear)
     stdp_learners = []
     conv_fc = net.conv_fc
     for i in range(conv_fc.__len__()):
@@ -195,15 +195,15 @@ def main():
             for p in m.parameters():
                 params_stdp.append(p)
 
-    params_stdp_set = set(params_stdp)
-    params_gd = []
-    for p in conv_fc.parameters():
-        if p not in params_stdp_set:
-            params_gd.append(p)
+    # params_stdp_set = set(params_stdp)
+    # params_gd = []
+    # for p in conv_fc.parameters():
+    #     if p not in params_stdp_set:
+    #         params_gd.append(p)
 
-    optimizer_gd = Adam(params_gd, lr=lr_scheduler.get_last_lr()[0], weight_decay=weight_decay)
+    # optimizer_gd = Adam(params_gd, lr=lr_scheduler.get_last_lr()[0], weight_decay=weight_decay)
     optimizer_stdp = SGD(params_stdp, lr=lr_scheduler.get_last_lr()[0], momentum=0., weight_decay=weight_decay)
-    gd_lr_scheduler = ReduceLROnPlateau(optimizer_gd, mode='min', patience=5)
+    # gd_lr_scheduler = ReduceLROnPlateau(optimizer_gd, mode='min', patience=5)
     stdp_lr_scheduler = ReduceLROnPlateau(optimizer_stdp, mode='min', patience=5)
 
     log_file.write(f"Start fine-tuning snn on {dataset_name} at {datetime.datetime.now()}\n")
@@ -223,7 +223,7 @@ def main():
 
             x_seq = x.unsqueeze(0).repeat(time_steps, 1, 1, 1, 1)
             x_seq = (x_seq > 0.5).float()
-            optimizer_gd.zero_grad()
+            # optimizer_gd.zero_grad()
             optimizer_stdp.zero_grad()
             y = net(x_seq)
             loss = F.mse_loss(y, target_onehot)
@@ -234,9 +234,10 @@ def main():
 
             optimizer_stdp.zero_grad()
             for i in range(stdp_learners.__len__()):
-                stdp_learners[i].step(on_grad=True)
+                with torch.no_grad():
+                    stdp_learners[i].step(on_grad=True)
 
-            optimizer_gd.step()
+            # optimizer_gd.step()
             optimizer_stdp.step()
 
             functional.reset_net(net)
@@ -248,7 +249,7 @@ def main():
                        f"\ttrain loss: {train_loss:.4f}\n"
                        f"\ttrain acc: {train_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n\n")
-        gd_lr_scheduler.step(train_loss)
+        # gd_lr_scheduler.step(train_loss)
         stdp_lr_scheduler.step(train_loss)
 
         net.eval()

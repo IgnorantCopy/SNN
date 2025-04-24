@@ -1,0 +1,2 @@
+Load pretrained model from ./models/ann_CIFAR10_256_SGD_1e-03.pth
+Start training ann on CIFAR10 at 2025-04-24 09:55:57.064694

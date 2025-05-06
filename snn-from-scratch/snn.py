@@ -52,6 +52,7 @@ def main():
     log_dir             = args.log_dir
     model_dir           = args.model_dir
     pretrained_model    = args.pretrained_model
+    num_workers         = 0 if dataset_name in ["Flowers"] else 2
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -80,7 +81,7 @@ def main():
         image_size = 32
         transform_train = transforms.Compose([
             transforms.RandomHorizontalFlip(),
-            transforms.RandomRotation(45),
+            transforms.RandomRotation(15),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
             transforms.ToTensor(),
@@ -124,8 +125,8 @@ def main():
         log_file.close()
         raise ValueError("Invalid dataset name")
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
     if optimizer_name == "Adam":
         optimizer = optim.Adam(model.parameters(), lr=lr, weight_decay=5e-4)

@@ -45,6 +45,7 @@ def main():
     log_dir             = args.log_dir
     model_dir           = args.model_dir
     pretrained_model    = args.pretrained_model
+    num_workers         = 0 if dataset_name in ["Flowers"] else 2
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -73,7 +74,6 @@ def main():
         image_size = 32
         transform_train = transforms.Compose([
             transforms.Resize(size=(image_size, image_size)),
-            # transforms.CenterCrop(image_size),
             transforms.RandomRotation(45),
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
@@ -82,7 +82,6 @@ def main():
         ])
         transform_test = transforms.Compose([
             transforms.Resize(size=(image_size, image_size)),
-            # transforms.CenterCrop(image_size),
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
@@ -116,7 +115,6 @@ def main():
 
         train_transforms = transforms.Compose([
             transforms.Resize(size=(image_size, image_size)),
-            # transforms.CenterCrop(image_size),
             transforms.RandomRotation(15),
             transforms.RandomHorizontalFlip(),
             transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
@@ -138,8 +136,8 @@ def main():
         log_file.close()
         raise ValueError("Invalid dataset name")
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers)
 
     if optimizer_name == "SGD":
         optimizer = optim.SGD(model.parameters(), lr=lr, momentum=0.9, weight_decay=weight_decay)

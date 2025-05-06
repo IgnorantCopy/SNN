@@ -14,12 +14,13 @@ import time
 import datetime
 from net import SNN
 from tutorial.send_message import send_message
+from data import FlowerDataset, Data
 
 
 def config():
     parser = argparse.ArgumentParser(description="Train SNN by BP + STDP", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
-    parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST"])
-    parser.add_argument("--dataset_root",           default="E:/DataSets",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "Flowers", "CIFAR10"])
+    parser.add_argument("--dataset_root",           default="D:/DataSets/",  type=str,   help="path to dataset")
     parser.add_argument("-T", "--time_steps",       default=10,             type=int,   help="number of time steps")
     parser.add_argument("--tau_pre",                default=2.,             type=float, help="time constant of presynaptic neuron")
     parser.add_argument("--tau_post",               default=100.,           type=float, help="time constant of postsynaptic neuron")
@@ -28,7 +29,7 @@ def config():
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")
     parser.add_argument("-e", "--epoches",          default=100,            type=int,   help="number of epoches")
     parser.add_argument("--fine_tune_epoch",        default=20,             type=int,   help="epoches for fine-tuning")
-    parser.add_argument("--gpu",                    default=False,          type=bool,  help="use gpu")
+    parser.add_argument("--gpu",                    default=True,          type=bool,  help="use gpu")
     parser.add_argument("--log",                    default=True,           type=bool,  help="save log file")
     parser.add_argument("--log_dir",                default="./logs",       type=str,   help="path to log directory")
     parser.add_argument("--model_dir",              default="./models",     type=str,   help="path to model directory")
@@ -57,6 +58,7 @@ def main():
     log_dir             = args.log_dir
     model_dir           = args.model_dir
     pretrained_model    = args.pretrained_model
+    num_workers         = 0 if dataset_name in ["Flowers"] else 2
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -80,13 +82,55 @@ def main():
         train_dataset = datasets.MNIST(root=dataset_root, train=True, download=True, transform=transform_train)
         test_dataset = datasets.MNIST(root=dataset_root, train=False, download=True, transform=transform_test)
         net = SNN(time_steps, batch_size, 1, num_of_labels, image_size)
+    elif dataset_name == "CIFAR10":
+        image_size = 32
+        num_of_labels = 10
+        transform_train = transforms.Compose([
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomRotation(15),
+            transforms.RandomHorizontalFlip(),
+            transforms.RandomVerticalFlip(),
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        transform_test = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
+        ])
+        train_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=True, transform=transform_train, download=True)
+        test_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=False, transform=transform_test, download=True)
+        net = SNN(time_steps, batch_size, 3, num_of_labels, image_size)
+    elif dataset_name == "Flowers":
+        image_size = 32
+        num_of_labels = 16
+        data = Data(dataset_name, dataset_root)
+        train_data = data.sample(frac=0.8, random_state=2025)
+        test_data = data.drop(train_data.index)
+
+        train_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.RandomRotation(15),
+            transforms.RandomHorizontalFlip(),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        test_transforms = transforms.Compose([
+            transforms.Resize(size=(image_size, image_size)),
+            transforms.Lambda(lambda x: x.convert("RGB") if x.mode != "RGB" else x),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
+        ])
+        train_dataset = FlowerDataset(train_data, train_transforms)
+        test_dataset = FlowerDataset(test_data, test_transforms)
+        net = SNN(time_steps, batch_size, 3, num_of_labels, image_size)
     else:
         log_file.write(f"Invalid dataset name: {dataset_name}\n")
         log_file.close()
         raise ValueError("Invalid dataset name")
 
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=num_workers, drop_last=True)
 
     start_epoch = 0
     best_acc = 0.
@@ -162,8 +206,7 @@ def main():
                 functional.reset_net(net)
         test_loss /= test_samples
         test_acc /= test_samples
-        log_file.write(f"Epoch {epoch+1}:\n"
-                       f"\ttest loss: {test_loss:.4f}\n"
+        log_file.write(f"\ttest loss: {test_loss:.4f}\n"
                        f"\ttest acc: {test_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n\n")
         if test_acc > best_acc:

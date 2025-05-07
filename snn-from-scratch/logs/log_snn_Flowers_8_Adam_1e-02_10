@@ -1,0 +1,20 @@
+Start training snn on Flowers at 2025-04-26 20:05:37.409770
+Epoch 1:
+	train_loss: 0.0632
+	train_acc: 0.0600
+	time: 37.30s
+
+	test_loss: 0.0621
+	test_acc: 0.0664
+	time: 13.87s
+Save best model with test_acc: 0.0664
+--------------------------------------------------
+Epoch 2:
+	train_loss: 0.0617
+	train_acc: 0.0579
+	time: 36.73s
+
+	test_loss: 0.0616
+	test_acc: 0.0426
+	time: 5.34s
+--------------------------------------------------

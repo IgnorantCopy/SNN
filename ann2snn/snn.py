@@ -18,7 +18,7 @@ def config():
     parser.add_argument("--dataset_root",       default="E:/DataSets",  type=str,   help="path to dataset")
     parser.add_argument("-m", "--mode",         default="max",          type=str,   help="convert mode", choices=["max", "99.9%", "1.0/2", "1.0/3", "1.0/4", "1.0/5"])
     parser.add_argument("-T", "--time_steps",   default=50,             type=int,   help="number of time steps to simulate")
-    parser.add_argument("--gpu",                default=False,          type=bool,  help="use GPU")
+    parser.add_argument("--gpu",                default=True,          type=bool,  help="use GPU")
     parser.add_argument("--log",                default=True,           type=bool,  help="save log file")
     parser.add_argument("--log_dir",            default="./logs",       type=str,   help="path to log directory")
     parser.add_argument("--model_dir",          default="./models",     type=str,   help="path to save model")
@@ -39,6 +39,7 @@ def main():
     model_dir       = args.model_dir
     batch_size      = int(ann_path.split("_")[-3])
     fine_tune       = args.fine_tune
+    num_workers     = 0 if dataset_name in ["Flowers"] else 2
 
     if not os.path.exists(log_dir):
         os.makedirs(log_dir)
@@ -69,11 +70,11 @@ def main():
             transforms.RandomHorizontalFlip(),
             transforms.RandomVerticalFlip(),
             transforms.ToTensor(),
-            transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
         transform_test = transforms.Compose([
             transforms.ToTensor(),
-            transforms.Normalize([0.5, 0.5, 0.5], [0.5, 0.5, 0.5])
+            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225])
         ])
         train_dataset = datasets.CIFAR10(root=dataset_root + "/CIFAR10", train=True, transform=transform_train, download=True)
         test_dataset = datasets.CIFAR10(root=dataset_root + "/CIFAR10", train=False, transform=transform_test, download=True)
@@ -109,8 +110,8 @@ def main():
         log_file.write(f"Invalid dataset name: {dataset_name}\n")
         log_file.close()
         raise ValueError("Invalid dataset name")
-    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=2)
-    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, num_workers=2, drop_last=True)
+    train_loader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True, num_workers=num_workers)
+    test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False, drop_last=True, num_workers=num_workers)
 
     params = torch.load(ann_path)
     ann_net.load_state_dict(params["state_dict"])

@@ -1,0 +1,4 @@
+Loaded ANN model from ./models/ann_Flowers_256_Adam_1e-03.pth with accuracy 0.8062261753494282
+Converted ANN to SNN at 2025-04-24 22:11:21.435819
+Test accuracy: 0.8057, Time elapsed: 22.90 seconds
+Saved SNN model at 2025-04-24 22:11:44.885272

@@ -1,0 +1,4 @@
+Loaded ANN model from ./models/ann_CIFAR10_256_SGD_1e-03.pth with accuracy 0.7434
+Converted ANN to SNN at 2025-04-25 15:41:26.754694
+Test accuracy: 0.3600, Time elapsed: 1320.68 seconds
+Saved SNN model at 2025-04-25 16:03:27.792564

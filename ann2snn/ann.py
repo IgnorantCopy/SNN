@@ -17,7 +17,7 @@ from data import FlowerDataset, Data
 def config():
     parser = argparse.ArgumentParser(description="Train ANN", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "Flowers102", "CIFAR10", "Flowers"])
-    parser.add_argument("--dataset_root",           default="D:/DataSets/", type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",           default="E:/DataSets/", type=str,   help="path to dataset")
     parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
     parser.add_argument("-lr", "--learning_rate",   default=1e-3,           type=float, help="learning rate")
     parser.add_argument("--weight_decay",           default=5e-4,           type=float, help="weight decay")

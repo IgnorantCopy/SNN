@@ -6,20 +6,20 @@ import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from torch.cuda import amp
 from torchvision import datasets, transforms
-from spikingjelly.activation_based import functional
+from spikingjelly.activation_based import functional, encoding
+import numpy as np
 import sys
 import os
 import time
 import datetime
 from net import ConvSNN
-from data import FlowerDataset, Data
-from tutorial.send_message import send_message
+# from tutorial.send_message import send_message
 
 
 def config():
     parser = argparse.ArgumentParser(description="Train SNN from scratch", formatter_class=argparse.ArgumentDefaultsHelpFormatter)
     parser.add_argument("--dataset",                default="MNIST",        type=str,   help="dataset name", choices=["MNIST", "CIFAR10", "Flowers"])
-    parser.add_argument("--dataset_root",           default="D:/DataSets/",  type=str,   help="path to dataset")
+    parser.add_argument("--dataset_root",           default="E:/DataSets/",  type=str,   help="path to dataset")
     parser.add_argument("-T", "--time_steps",       default=100,            type=int,   help="number of time steps")
     parser.add_argument("-t", "--tau",              default=2.,             type=float, help="time constant of neuron")
     parser.add_argument("--batch_size",             default=64,             type=int,   help="batch size")
@@ -34,6 +34,24 @@ def config():
     parser.add_argument("--model_dir",              default="./models",     type=str,   help="path to model directory")
     parser.add_argument("--pretrained_model",       default='',             type=str,   help="path to pretrained model")
     return parser.parse_args()
+
+
+def plot_loss(train_losses: list, test_losses: list):
+    import plotly.graph_objects as go
+    assert len(train_losses) == len(test_losses)
+    x = np.arange(len(train_losses))
+    fig = go.Figure(data=[
+        go.Scatter(x=x, y=train_losses, name="train loss", mode="lines"),
+        go.Scatter(x=x, y=test_losses, name="test loss", mode="lines"),
+    ])
+    fig.update_layout(title={
+        "text": "Loss",
+        "xanchor": "center",
+        "yanchor": "top",
+        "x": 0.5,
+        "y": 0.9,
+    }, xaxis_title="Epoch", yaxis_title="Loss")
+    fig.show()
 
 
 def main():
@@ -90,12 +108,14 @@ def main():
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
-        train_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=True, transform=transform_train,
+        train_dataset = datasets.CIFAR10(root=os.path.join(dataset_root, "CIFAR10"), train=True, transform=transform_train,
                                         download=True)
-        test_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=False, transform=transform_test,
+        test_dataset = datasets.CIFAR10(root=os.path.join(dataset_root, "CIFAR10"), train=False, transform=transform_test,
                                         download=True)
         model = ConvSNN(time_steps, tau, batch_size, 3, num_of_labels, image_size, use_cupy)
     elif dataset_name == "Flowers":
+        from data import FlowerDataset, Data
+
         num_of_labels = 16
         image_size = 32
         data = Data(dataset_name, dataset_root)
@@ -141,6 +161,7 @@ def main():
     model.to(device)
     use_amp = use_amp and torch.cuda.is_available()
     scaler = amp.GradScaler() if use_amp else None
+    encoder = encoding.PoissonEncoder(step_mode='m')
 
     start_epoch = 0
     best_acc = 0.
@@ -160,6 +181,8 @@ def main():
 
     log_file.write(f"Start training snn on {dataset_name} at {datetime.datetime.now()}\n")
     log_file.flush()
+    tran_losses = []
+    test_losses = []
     for epoch in range(start_epoch, epoches):
         start_time = time.time()
         train_loss = 0.
@@ -174,13 +197,15 @@ def main():
             optimizer.zero_grad()
             if scaler is not None:
                 with amp.autocast():
-                    out_fr = model(images)
+                    encoded_images = encoder(images)
+                    out_fr = model(encoded_images)
                     loss = F.mse_loss(out_fr, labels_onehot)
                 scaler.scale(loss).backward()
                 scaler.step(optimizer)
                 scaler.update()
             else:
-                out_fr = model(images)
+                encoded_images = encoder(images)
+                out_fr = model(encoded_images)
                 loss = F.mse_loss(out_fr, labels_onehot)
                 loss.backward()
                 optimizer.step()
@@ -191,6 +216,7 @@ def main():
             functional.reset_net(model)
         train_loss /= train_samples
         train_acc /= train_samples
+        tran_losses.append(train_loss)
         log_file.write(f"Epoch {epoch+1}:\n"
                        f"\ttrain_loss: {train_loss:.4f}\n"
                        f"\ttrain_acc: {train_acc:.4f}\n"
@@ -208,7 +234,8 @@ def main():
                 labels = labels.to(device)
                 labels_onehot = F.one_hot(labels, num_classes=num_of_labels).float().to(device)
 
-                out_fr = model(images)
+                encoded_images = encoder(images)
+                out_fr = model(encoded_images)
                 loss = F.mse_loss(out_fr, labels_onehot)
 
                 test_loss += loss.item() * labels.numel()
@@ -217,6 +244,7 @@ def main():
                 functional.reset_net(model)
         test_loss /= test_samples
         test_acc /= test_samples
+        test_losses.append(test_loss)
         log_file.write(f"\ttest_loss: {test_loss:.4f}\n"
                        f"\ttest_acc: {test_acc:.4f}\n"
                        f"\ttime: {time.time() - start_time:.2f}s\n")
@@ -233,7 +261,8 @@ def main():
         log_file.flush()
     log_file.write(f"End training snn on {dataset_name} at {datetime.datetime.now()} with best test_acc {best_acc:.4f}\n")
     log_file.close()
-    send_message()
+    # send_message()
+    plot_loss(tran_losses, test_losses)
 
 
 if __name__ == '__main__':

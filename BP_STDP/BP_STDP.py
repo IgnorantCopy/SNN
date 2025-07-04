@@ -114,8 +114,8 @@ def main():
             transforms.ToTensor(),
             transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
         ])
-        train_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=True, transform=transform_train, download=True)
-        test_dataset = datasets.CIFAR10(root=dataset_root + "CIFAR10", train=False, transform=transform_test, download=True)
+        train_dataset = datasets.CIFAR10(root=os.path.join(dataset_root, "CIFAR10"), train=True, transform=transform_train, download=True)
+        test_dataset = datasets.CIFAR10(root=os.path.join(dataset_root, "CIFAR10"), train=False, transform=transform_test, download=True)
         net = SNN(time_steps, batch_size, 3, num_of_labels, image_size)
     elif dataset_name == "Flowers":
         from data import FlowerDataset, Data
